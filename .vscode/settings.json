@@ -1,0 +1,15 @@
+{
+    "objectscript.conn": {
+      "username": "_SYSTEM",
+      "password": "SYS",
+      "ns": "CARBONCOUNTER",
+      "active": true,
+      "docker-compose": {
+        "service": "iris",
+        "internalPort": 52773
+      },
+      "links": {
+        "CarbonCounter": "http://localhost:${port}/csp/carbon-counter/index.html"
+      }
+    }
+  }

@@ -1,0 +1,12 @@
+version: '3.6'
+services:
+  iris:
+    build: 
+      context: .
+    command: --check-caps false
+    ports: 
+      - 52775:52773
+    volumes:
+      - ./web:/opt/carbon-counter/csp
+      - ./tests:/opt/carbon-counter/tests
+      - ./:/irisdev/app
