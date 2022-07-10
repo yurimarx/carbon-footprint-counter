@@ -80,6 +80,7 @@ ClassMethod SetupREST(pNameSpace As %String, pUrl As %String, pResource As %Stri
 
 ClassMethod SetupMigrate() As %Status
 {
+  Set $Namespace = "carboncounter"
   Quit ##class(dc.carboncounter.Migration).Migrate()
 }
 

@@ -9,6 +9,7 @@ ClassMethod Migrate() As %Status
     Set sc = ..MigrateEmissionUnit()
     Set sc = ..MigrateEmissionSegment()
     Set sc = ..MigrateEmissionType()
+    Set sc = ..MigrateEmissionFactor()
     
     Return sc
 }
@@ -49,8 +50,9 @@ ClassMethod MigrateEmissionType() As %Status
     Set sc = ..CreateEmissionType("Refrigerants", "S1 - Refrigerants and Fugitives")
     Set sc = ..CreateEmissionType("Grid Region - Location Based", "S2 - Purchased Electricity")
     Set sc = ..CreateEmissionType("eGrid Subregion - Residual Mix - Market Based", "S2 - Purchased Electricity")
-    Set sc = ..CreateEmissionType("Transport", "S3 - Transportation")
-    
+    Set sc = ..CreateEmissionType("Transportation", "S3 - Transportation")
+    Set sc = ..CreateEmissionType("Biomass Fuels - Liquid", "S1 - Stationary Combustion")
+    Set sc = ..CreateEmissionType("Biomass Fuels - Kraft Pulping Liquor, by Wood Furnish", "S1 - Stationary Combustion")
     Return sc
 }
 
@@ -103,6 +105,37 @@ ClassMethod GetEmissionSegmentByName(name As %String) As dc.carboncounter.Emissi
         Set obj = ""
     }
     Return obj
+}
+
+/// Migrate Emission Factor
+ClassMethod MigrateEmissionFactor() As %Status
+{
+    Set sc = $$$OK
+    Set file  = ##class(%File).%New("/opt/carbon-counter/emissionfactors.csv")
+    Set sc =  file.Open("RU")
+    Do file.ReadLine(,.sc)
+    While 'file.AtEnd {
+        Set emissionFactor = ##class(EmissionFactor).%New()
+        Set line = file.ReadLine(,.sc)
+        Set emissionFactor.emissionType = ##class(EmissionType).%OpenId($PIECE(line,";",1))
+        Set emissionFactor.emissionName = $PIECE(line,";",2)
+        Set emissionFactor.hhv = $NUMBER($PIECE(line,";",3),",")
+        Set emissionFactor.co2Factor = $NUMBER($PIECE(line,";",4),",")
+        Set emissionFactor.ch4Factor = $NUMBER($PIECE(line,";",5),",")
+        Set emissionFactor.n2oFactor = $NUMBER($PIECE(line,";",6),",")
+        Set emissionFactor.biogenicCo2Factor = $NUMBER($PIECE(line,";",7),",")
+        Set emissionFactor.ar4 = $NUMBER($PIECE(line,";",8),",")
+        Set emissionFactor.ar5 = $NUMBER($PIECE(line,";",9),",")
+        Set emissionFactor.unit = ##class(EmissionUnit).%OpenId($PIECE(line,";",10))
+        Set emissionFactor.source = $PIECE(line,";",11)
+        Set emissionFactor.fuelEfficiency = $NUMBER($PIECE(line,";",12),",")
+        Set emissionFactor.secondUnit = ##class(EmissionUnit).%OpenId($PIECE(line,";",13))
+        Set emissionFactor.co4Kg = $NUMBER($PIECE(line,";",14),",")
+        Set emissionFactor.no2Kg = $NUMBER($PIECE(line,";",15),",")
+        Set sc = emissionFactor.%Save()
+    }
+    Do file.Close()
+    Return sc
 }
 
 }

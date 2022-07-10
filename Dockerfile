@@ -17,6 +17,7 @@ COPY Installer.cls .
 
 COPY src src
 COPY web/dist/sakai csp
+COPY emissionfactors.csv emissionfactors.csv
 
 SHELL ["/irissession.sh"]
 
