@@ -6,7 +6,7 @@ Calculate carbon footprint into enterprises
 ```
 zpm "install carbon-footprint-counter"
 ```
-2. Access Mindmap UI: http://localhost:52775/csp/carbon-counter/index.html
+2. Access the Carbon Footprint Counter UI: http://localhost:52775/carboncounter/index.html
 
 ## Installation using Docker Compose
 1. Clone/git pull the repo into any local directory
@@ -27,4 +27,4 @@ $ docker-compose build
 $ docker-compose up -d 
 ```
 
-4. Go to http://localhost:4200 or http://localhost:52775/csp/carbon-counter/index.html to use the Carbon Counter frontend
+4. Go to http://localhost:4200 or http://localhost:52775/carboncounter/index.html to use the Carbon Counter frontend

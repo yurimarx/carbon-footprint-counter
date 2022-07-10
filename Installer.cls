@@ -7,10 +7,10 @@ XData setup
   <Default Name="APPDIR" Dir="#{$system.Process.CurrentDirectory()}" />
   <Default Name="SourceDir" Dir="${APPDIR}/src" />
   <Default Name="NAMESPACE" Value="CARBONCOUNTER" />
-  <Default Name="APPURL" Value="/csp/carbon-counter" />
+  <Default Name="APPURL" Value="/carboncounter" />
   <Default Name="RESTURL" Value="/rest/carbon-counter" />
   <Default Name="CSPPATH" Dir="${APPDIR}/csp" />
-  <Default Name="DBRESOURCE" Value="%DB_${NAMESPACE}" />
+  <Default Name="DBRESOURCE" Value="%DB_USER" />
 
   <Resource
     Name="${DBRESOURCE}" 
@@ -74,6 +74,7 @@ ClassMethod SetupREST(pNameSpace As %String, pUrl As %String, pResource As %Stri
   Set p("NameSpace") = pNameSpace
   Set p("MatchRoles") = ":"_pResource
   Set p("DispatchClass") = pClass
+  Set p("AutheEnabled") = $$$AutheCache
   Quit ##class(Security.Applications).Create(pUrl, .p)
 }
 

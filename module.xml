@@ -7,11 +7,11 @@
       <Description>Carbon footprint calculator</Description>
       <Keywords>REST,Full-stack,Carbon,Footprint,Calculator</Keywords>
       <Packaging>module</Packaging>
-      <CSPApplication CookiePath="/csp/carbon-counter/" DefaultTimeout="900" 
+      <CSPApplication CookiePath="/carboncounter/" DefaultTimeout="900" 
                       DeployPath="${cspdir}/carbon-counter" MatchRoles=":${dbrole}" 
                       PasswordAuthEnabled="0" Recurse="1" ServeFiles="1" 
                       ServeFilesTimeout="3600" SourcePath="/web" UnauthenticatedEnabled="0" 
-                      Url="/csp/carbon-counter" UseSessionCookie="2"/>
+                      Url="/carboncounter" UseSessionCookie="2"/>
       <SourcesRoot>src</SourcesRoot>
       <Resource Directory="dc" Name="carbon-counter.PKG"/>
       <CSPApplication CookiePath="/rest/carbon-counter/" DefaultTimeout="900" 

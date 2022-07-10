@@ -16,7 +16,7 @@ USER ${ISC_PACKAGE_MGRUSER}
 COPY Installer.cls .
 
 COPY src src
-COPY web csp
+COPY web/dist/sakai csp
 
 SHELL ["/irissession.sh"]
 
