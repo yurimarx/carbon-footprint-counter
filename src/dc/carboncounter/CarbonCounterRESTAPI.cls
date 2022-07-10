@@ -12,13 +12,13 @@ XData UrlMap [ XMLNamespace = "http://www.intersystems.com/urlmap" ]
 <Route Url="/_spec" Method="GET" Call="SwaggerSpec" />
 
 <!-- Get all records of emission unit class -->
-<Route Url="/emissionunits/all" Method="GET" Call="GetAllEmissionUnits"/>
+<Route Url="/emissionunits" Method="GET" Call="GetAllEmissionUnits"/>
 <!-- GET method to return JSON for a given emission unit id-->
 <Route Url="/emissionunits/:id" Method="GET" Call="GetEmissionUnit"/>
 <!-- Delete an emission unit with id-->
 <Route Url="/emissionunits/:id" Method="DELETE" Call="DeleteEmissionUnit"/>
 <!-- Post an emission unit -->
-<Route Url="/emissionunits/" Method="POST" Call="MergeEmissionUnit"/>
+<Route Url="/emissionunits" Method="POST" Call="MergeEmissionUnit"/>
 
 
 <!-- Get all records of emission type class -->

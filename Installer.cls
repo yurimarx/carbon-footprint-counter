@@ -53,6 +53,11 @@ XData setup
     <Arg Value="dc.carboncounter.CarbonCounterRESTAPI"/>
   </Invoke>
 
+  <Invoke Class="App.Installer" Method="SetupMigrate" CheckStatus="1">
+    
+  </Invoke>
+
+
 </Manifest>
 }
 
@@ -70,6 +75,11 @@ ClassMethod SetupREST(pNameSpace As %String, pUrl As %String, pResource As %Stri
   Set p("MatchRoles") = ":"_pResource
   Set p("DispatchClass") = pClass
   Quit ##class(Security.Applications).Create(pUrl, .p)
+}
+
+ClassMethod SetupMigrate() As %Status
+{
+  Quit ##class(dc.carboncounter.Migration).Migrate()
 }
 
 }
