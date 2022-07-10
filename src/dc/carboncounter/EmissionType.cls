@@ -9,6 +9,8 @@ Property name As %String(MAXLEN = 300);
 
 Property emissionSegment As dc.carboncounter.EmissionSegment;
 
+Property emissionSegmentName As %String(%JSONINCLUDE = "outputonly") [ Calculated, SqlComputeCode = {set {*}=##class(dc.carboncounter.EmissionSegment).%OpenId({emissionSegment}).name}, SqlComputed ];
+
 Storage Default
 {
 <Data name="EmissionTypeDefaultData">
@@ -20,6 +22,9 @@ Storage Default
 </Value>
 <Value name="3">
 <Value>emissionSegment</Value>
+</Value>
+<Value name="4">
+<Value>emissionSegmentName</Value>
 </Value>
 </Data>
 <DataLocation>^dc.carboncounter.EmissionTypeD</DataLocation>

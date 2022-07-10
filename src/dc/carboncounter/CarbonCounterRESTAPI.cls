@@ -22,22 +22,22 @@ XData UrlMap [ XMLNamespace = "http://www.intersystems.com/urlmap" ]
 
 
 <!-- Get all records of emission type class -->
-<Route Url="/emissiontypes/all" Method="GET" Call="GetAllEmissionType"/>
+<Route Url="/emissiontypes" Method="GET" Call="GetAllEmissionType"/>
 <!-- GET method to return JSON for a given emission type id-->
 <Route Url="/emissiontypes/:id" Method="GET" Call="GetEmissionType"/>
 <!-- Delete an emission type with id-->
 <Route Url="/emissiontypes/:id" Method="DELETE" Call="DeleteEmissionType"/>
 <!-- Post an emission type -->
-<Route Url="/emissiontypes/" Method="POST" Call="MergeEmissionType"/>
+<Route Url="/emissiontypes" Method="POST" Call="MergeEmissionType"/>
 
 <!-- Get all records of emission segment class -->
-<Route Url="/emissionsegment/all" Method="GET" Call="GetAllEmissionSegment"/>
+<Route Url="/emissionsegments" Method="GET" Call="GetAllEmissionSegment"/>
 <!-- GET method to return JSON for a given emission segment id-->
 <Route Url="/emissionsegments/:id" Method="GET" Call="GetEmissionSegment"/>
 <!-- Delete an emission segment with id-->
 <Route Url="/emissionsegments/:id" Method="DELETE" Call="DeleteEmissionSegment"/>
 <!-- Post an emission segment -->
-<Route Url="/emissionsegments/" Method="POST" Call="MergeEmissionSegment"/>
+<Route Url="/emissionsegments" Method="POST" Call="MergeEmissionSegment"/>
 
 
 </Routes>
@@ -134,7 +134,7 @@ ClassMethod DeleteEmissionUnit(id As %Integer) As %Status
 }
 
 /// Retrieve all the records of Emission Type
-ClassMethod GetAllEmissionTypes() As %Status
+ClassMethod GetAllEmissionType() As %Status
 {
 
     #dim tSC As %Status = $$$OK
@@ -214,7 +214,7 @@ ClassMethod DeleteEmissionType(id As %Integer) As %Status
 }
 
 /// Retrieve all the records of Emission Segment
-ClassMethod GetAllEmissionSegments() As %Status
+ClassMethod GetAllEmissionSegment() As %Status
 {
 
     #dim tSC As %Status = $$$OK
