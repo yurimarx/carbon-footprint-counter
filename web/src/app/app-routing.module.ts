@@ -15,7 +15,7 @@ import { EmissionFactorComponent } from './components/emissionfactor/emissionfac
             {
                 path: '', component: AppMainComponent,
                 children: [
-                    {path: '', component: DashboardComponent},
+                    {path: '', component: EmissionFactorComponent},
                     {path: 'pages/emissionunit', component: EmissionUnitComponent},
                     {path: 'pages/emissionsegment', component: EmissionSegmentComponent},
                     {path: 'pages/emissiontype', component: EmissionTypeComponent},
