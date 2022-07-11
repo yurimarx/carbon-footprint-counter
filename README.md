@@ -27,7 +27,7 @@ $ docker-compose build
 $ docker-compose up -d 
 ```
 
-4. Go to http://localhost:4200 or http://localhost:52775/carboncounter/index.html to use the Carbon Counter frontend
+4. Go to http://localhost:52775/carboncounter/index.html to use the Carbon Counter frontend
 
 # To be done:
 1. Complete Emission Factor UI - prevision july, 12
