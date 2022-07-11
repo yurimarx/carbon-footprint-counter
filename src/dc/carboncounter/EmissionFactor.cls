@@ -7,6 +7,8 @@ Property emissionFactorId As %Integer(%JSONINCLUDE = "outputonly") [ Calculated,
 
 Property emissionType As dc.carboncounter.EmissionType;
 
+Property emissionTypeName As %String(%JSONINCLUDE = "outputonly") [ Calculated, SqlComputeCode = {set {*}=##class(dc.carboncounter.EmissionType).%OpenId({emissionType}).name}, SqlComputed ];
+
 Property emissionName As %String(MAXLEN = 200);
 
 Property hhv As %Double(SCALE = 8);

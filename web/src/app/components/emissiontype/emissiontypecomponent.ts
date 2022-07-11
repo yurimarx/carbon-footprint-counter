@@ -110,14 +110,4 @@ export class EmissionTypeComponent implements OnInit {
 
     }
 
-    getEmissionSegmentName(emissionSegmentId: number) {
-        let result = new EmissionSegment().name
-        this.emissionSegments.forEach(element => {
-            if (element.emissionSegmentId === emissionSegmentId) {
-                result = element.name
-            }
-        });
-        return result
-    }
-    
 }

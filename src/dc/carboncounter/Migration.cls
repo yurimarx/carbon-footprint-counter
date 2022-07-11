@@ -107,6 +107,22 @@ ClassMethod GetEmissionSegmentByName(name As %String) As dc.carboncounter.Emissi
     Return obj
 }
 
+ClassMethod GetEmissionUnitByName(name As %String) As dc.carboncounter.EmissionUnit
+{
+    Set qry = "SELECT ID FROM dc_carboncounter.EmissionUnit WHERE name = ?"
+    Set tStatement = ##class(%SQL.Statement).%New()
+    Set tSC = tStatement.%Prepare(qry)
+    If tSC'=1 {WRITE "%Prepare failed:" DO $System.Status.DisplayError(tSC) QUIT}
+    Set rset = tStatement.%Execute(name)
+    if rset.%Next() {
+        Set obj = ##class(dc.carboncounter.EmissionUnit).%OpenId(rset.ID)    
+    } Else {
+        Set obj = ""
+    }
+    Return obj
+}
+
+
 /// Migrate Emission Factor
 ClassMethod MigrateEmissionFactor() As %Status
 {
@@ -126,10 +142,10 @@ ClassMethod MigrateEmissionFactor() As %Status
         Set emissionFactor.biogenicCo2Factor = $NUMBER($PIECE(line,";",7),",")
         Set emissionFactor.ar4 = $NUMBER($PIECE(line,";",8),",")
         Set emissionFactor.ar5 = $NUMBER($PIECE(line,";",9),",")
-        Set emissionFactor.unit = ##class(EmissionUnit).%OpenId($PIECE(line,";",10))
+        Set emissionFactor.unit = ..GetEmissionUnitByName($PIECE(line,";",10))
         Set emissionFactor.source = $PIECE(line,";",11)
         Set emissionFactor.fuelEfficiency = $NUMBER($PIECE(line,";",12),",")
-        Set emissionFactor.secondUnit = ##class(EmissionUnit).%OpenId($PIECE(line,";",13))
+        Set emissionFactor.secondUnit = ..GetEmissionUnitByName($PIECE(line,";",13))
         Set emissionFactor.co4Kg = $NUMBER($PIECE(line,";",14),",")
         Set emissionFactor.no2Kg = $NUMBER($PIECE(line,";",15),",")
         Set sc = emissionFactor.%Save()

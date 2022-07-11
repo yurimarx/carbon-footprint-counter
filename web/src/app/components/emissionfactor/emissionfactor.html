@@ -15,14 +15,14 @@
                 </ng-template>
             </p-toolbar>
 
-            <p-table #dt [value]="emissionTypes" [columns]="cols" responsiveLayout="scroll" [rows]="10" 
-                         [globalFilterFields]="['name','emissionSegment']" [rows]="10" [paginator]="true" 
+            <p-table #dt [value]="emissionFactors" [columns]="cols" responsiveLayout="scroll" [rows]="10" 
+                         [globalFilterFields]="['emissionName','emissionFactor']" [rows]="10" [paginator]="true" 
                          [rowsPerPageOptions]="[10,20,30]" [showCurrentPageReport]="true" 
                          currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" 
-                         [rowHover]="true" dataKey="emissionTypeId">
+                         [rowHover]="true" dataKey="emissionFactorId">
                 <ng-template pTemplate="caption">
                     <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
-                        <h5 class="m-0">Manage Emission Types</h5>
+                        <h5 class="m-0">Manage Emission Factors</h5>
                         <span class="block mt-2 md:mt-0 p-input-icon-left">
                             <i class="pi pi-search"></i>
                             <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')" placeholder="Search..." />
@@ -31,26 +31,26 @@
                 </ng-template>
                 <ng-template pTemplate="header">
                     <tr>
-                        <th pSortableColumn="name">Name <p-sortIcon field="name"></p-sortIcon></th>
-                        <th pSortableColumn="emissionSegment">Emission Segment <p-sortIcon field="emissionSegment"></p-sortIcon></th>
+                        <th pSortableColumn="emissionName">Name <p-sortIcon field="name"></p-sortIcon></th>
+                        <th pSortableColumn="emissionType">Emission Type <p-sortIcon field="emissionType"></p-sortIcon></th>
                         <th></th>
                     </tr>
                 </ng-template>
-                <ng-template pTemplate="body" let-emissionType>
+                <ng-template pTemplate="body" let-emissionFactor>
                     <tr>
                         <td style="width:40%; min-width:10rem;">
                             <span class="p-column-title">Name</span>
-                            {{emissionType.name}}
+                            {{emissionFactor.emissionName}}
                         </td>
                         <td style="width:60%; min-width:10rem;">
-                            <span class="p-column-title">Emission Segment</span>
-                            {{emissionType.emissionSegmentName}}
+                            <span class="p-column-title">Emission Type</span>
+                            {{emissionFactor.emissionTypeName}}
                         </td>
                         
                         <td>
                             <div class="flex">
-                                <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success mr-2" (click)="editEmissionType(emissionType)"></button>
-                                <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning" (click)="deleteEmissionType(emissionType)"></button>
+                                <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success mr-2" (click)="editEmissionFactor(emissionFactor)"></button>
+                                <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning" (click)="deleteEmissionFactor(emissionFactor)"></button>
                             </div>
                         </td>
                     </tr>
@@ -58,19 +58,19 @@
             </p-table>
         </div>
 
-        <p-dialog [(visible)]="emissionTypeDialog" [style]="{width: '450px'}" 
-                    header="Emission TYpe Details" [modal]="true" class="p-fluid">
+        <p-dialog [(visible)]="emissionFactorDialog" [style]="{width: '450px'}" 
+                    header="Emission Factor Details" [modal]="true" class="p-fluid">
             <ng-template pTemplate="content">
                 <div class="field">
                     <label for="name">Name</label>
-                    <input type="text" pInputText id="name" [(ngModel)]="emissionType.name" required autofocus [ngClass]="{'ng-invalid ng-dirty' : submitted && !emissionType.name}"/>
-                    <small class="ng-dirty ng-invalid" *ngIf="submitted && !emissionType.name">Name is required.</small>
+                    <input type="text" pInputText id="name" [(ngModel)]="emissionFactor.emissionName" required autofocus [ngClass]="{'ng-invalid ng-dirty' : submitted && !emissionFactor.name}"/>
+                    <small class="ng-dirty ng-invalid" *ngIf="submitted && !emissionFactor.emissionName">Name is required.</small>
                 </div>
                 <div class="field">
-                    <label for="emissionSegment">Emission Segment</label>
-                    <p-dropdown id="emissionSegment" [options]="emissionSegments" 
-                                optionLabel="name" optionValue="emissionSegmentId" dataKey="emissionSegmentId"
-                                [(ngModel)]="emissionType.emissionSegment" placeholder="Select a Segment"></p-dropdown>
+                    <label for="emissionType">Emission Type</label>
+                    <p-dropdown id="emissionType" [options]="emissionTypes" 
+                                optionLabel="name" optionValue="emissionTypeId" dataKey="emissionTypeId"
+                                [(ngModel)]="emissionFactor.emissionType" placeholder="Select a Emission Type"></p-dropdown>
                 </div>
 
                 <br/>
@@ -79,17 +79,17 @@
 
             <ng-template pTemplate="footer">
                 <button pButton pRipple label="Cancel" icon="pi pi-times" class="p-button-text" (click)="hideDialog()"></button>
-                <button pButton pRipple label="Save" icon="pi pi-check" class="p-button-text" (click)="saveEmissionType()"></button>
+                <button pButton pRipple label="Save" icon="pi pi-check" class="p-button-text" (click)="saveEmissionFactor()"></button>
             </ng-template>
         </p-dialog>
 
-        <p-dialog [(visible)]="deleteEmissionTypeDialog" header="Confirm" [modal]="true" [style]="{width:'450px'}">
+        <p-dialog [(visible)]="deleteEmissionFactorDialog" header="Confirm" [modal]="true" [style]="{width:'450px'}">
             <div class="flex align-items-center justify-content-center">
                 <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem"></i>
-                <span *ngIf="emissionType">Are you sure you want to delete <b>{{emissionType.name}}</b>?</span>
+                <span *ngIf="emissionFactor">Are you sure you want to delete <b>{{emissionFactor.emissionName}}</b>?</span>
             </div>
             <ng-template pTemplate="footer">
-                <button pButton pRipple icon="pi pi-times" class="p-button-text" label="No" (click)="deleteEmissionTypeDialog = false"></button>
+                <button pButton pRipple icon="pi pi-times" class="p-button-text" label="No" (click)="deleteEmissionFactorDialog = false"></button>
                 <button pButton pRipple icon="pi pi-check" class="p-button-text" label="Yes" (click)="confirmDelete()"></button>
             </ng-template>
         </p-dialog>

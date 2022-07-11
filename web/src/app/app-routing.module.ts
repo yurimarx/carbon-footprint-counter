@@ -8,6 +8,7 @@ import { AccessComponent } from './components/access/access.component';
 import { EmissionUnitComponent } from './components/emissionunit/emissionunitcomponent';
 import { EmissionSegmentComponent } from './components/emissionsegment/emissionsegmentcomponent';
 import { EmissionTypeComponent } from './components/emissiontype/emissiontypecomponent';
+import { EmissionFactorComponent } from './components/emissionfactor/emissionfactorcomponent';
 @NgModule({
     imports: [
         RouterModule.forRoot([
@@ -18,6 +19,7 @@ import { EmissionTypeComponent } from './components/emissiontype/emissiontypecom
                     {path: 'pages/emissionunit', component: EmissionUnitComponent},
                     {path: 'pages/emissionsegment', component: EmissionSegmentComponent},
                     {path: 'pages/emissiontype', component: EmissionTypeComponent},
+                    {path: 'pages/emissionfactor', component: EmissionFactorComponent},
                 ],
             },
             {path:'pages/error', component: ErrorComponent},

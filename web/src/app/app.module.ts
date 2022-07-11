@@ -119,6 +119,8 @@ import { EmissionSegmentService } from './components/emissionsegment/emissionseg
 import { EmissionSegmentComponent } from './components/emissionsegment/emissionsegmentcomponent';
 import { EmissionTypeComponent } from './components/emissiontype/emissiontypecomponent';
 import { EmissionTypeService } from './components/emissiontype/emissiontypeservice';
+import { EmissionFactorComponent } from './components/emissionfactor/emissionfactorcomponent';
+import { EmissionFactorService } from './components/emissionfactor/emissionfactorservice';
 
 @NgModule({
     imports: [
@@ -222,6 +224,7 @@ import { EmissionTypeService } from './components/emissiontype/emissiontypeservi
         EmissionUnitComponent,
         EmissionSegmentComponent,
         EmissionTypeComponent,
+        EmissionFactorComponent,
         BlockViewer,
         ErrorComponent,
         NotfoundComponent,
@@ -232,7 +235,7 @@ import { EmissionTypeService } from './components/emissiontype/emissiontypeservi
         {provide: LocationStrategy, useClass: HashLocationStrategy},
         CountryService, CustomerService, EventService, IconService, NodeService,
         PhotoService, ProductService, EmissionUnitService, EmissionSegmentService, 
-        EmissionTypeService, MenuService, ConfigService
+        EmissionTypeService, EmissionFactorService, MenuService, ConfigService
     ],
     bootstrap: [AppComponent]
     

@@ -25,17 +25,12 @@ export class AppMenuComponent implements OnInit {
     ngOnInit() {
         this.model = [
             {
-                label: 'Home',
-                items:[
-                    {label: 'Dashboard',icon: 'pi pi-fw pi-home', routerLink: ['/']}
-                ]
-            },
-            {
-                label: 'Pages',
+                label: 'Carbon Counter',
                 items: [
                     {label: 'Emission Unit', icon: 'pi pi-fw pi-user-edit', routerLink: ['/pages/emissionunit']},
                     {label: 'Emission Segment', icon: 'pi pi-fw pi-user-edit', routerLink: ['/pages/emissionsegment']},
                     {label: 'Emission Type', icon: 'pi pi-fw pi-user-edit', routerLink: ['/pages/emissiontype']},
+                    {label: 'Emission Factor', icon: 'pi pi-fw pi-sliders-v', routerLink: ['/pages/emissionfactor']},
                 ]
             }
         ];
