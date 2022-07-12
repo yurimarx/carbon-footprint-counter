@@ -22,6 +22,10 @@ export class StationaryService {
     return this.http.get<Stationary>(`${this.url}/${stationaryCombustionId}`).pipe(take(1));
   }
 
+  public calculate(id: number, amount: number): Observable<Stationary> {
+    return this.http.get<Stationary>(`${this.url}/calculate/${id}/${amount}`).pipe(take(1));
+  }
+
   public delete(stationaryCombustionId: number): Observable<any> {
     return this.http.delete<any>(`${this.url}/${stationaryCombustionId}`).pipe(take(1));
   }

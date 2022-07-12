@@ -10,7 +10,7 @@ Parameter HandleCorsRequest = 1;
 Parameter PAGESIZE As INTEGER = 20;
 
 /// Get Results from SQL 
-ClassMethod GetSQLResults(Sql As %String, Output rset As %SQL.StatementResult) As %Status
+ClassMethod GetSQLResults(Sql As %String, Output rset As %SQL.StatementResult, filter As %Integer = 0) As %Status
 {
     #Dim tSC As %Status
 
@@ -18,7 +18,11 @@ ClassMethod GetSQLResults(Sql As %String, Output rset As %SQL.StatementResult) A
     Set tStatement = ##class(%SQL.Statement).%New()
     Set tSC = tStatement.%Prepare(qry)
     If tSC'=1 {WRITE "%Prepare failed:" DO $System.Status.DisplayError(tSC) QUIT}
-    Set rset = tStatement.%Execute()
+    If filter = 0 {
+      Set rset = tStatement.%Execute()
+    } Else {
+      Set rset = tStatement.%Execute(filter)
+    }
     Return tSC
 }
 

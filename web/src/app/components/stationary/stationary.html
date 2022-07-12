@@ -93,29 +93,29 @@
                     </div>
                     <div class="field md:col-2 sm:col-3">
                         <label for="year">Year</label>
-                        <input type="text" pInputText id="year" [(ngModel)]="stationary.year" />
+                        <p-inputNumber id="year" minFractionDigits="0" [(ngModel)]="stationary.year" mode="decimal"></p-inputNumber>
                     </div>
                     <div class="field md:col-5 sm:col-4">
                         <label for="fuel">Fuel</label>
-                        <p-dropdown id="fuel" [options]="emissionFactors" 
+                        <p-dropdown id="fuel" [options]="emissionFactors" (onChange)="onChangeFuel()" 
                                     optionLabel="emissionName" optionValue="emissionFactorId" dataKey="emissionFactorId"
                                     [(ngModel)]="stationary.fuel" placeholder="Select a Fuel"></p-dropdown>
                     </div>
                     <div class="field md:col-2 sm:col-3">
                         <label for="amout">Amount</label>
-                        <p-inputNumber id="amount" [(ngModel)]="stationary.amount" mode="decimal"></p-inputNumber>
+                        <p-inputNumber locale="en-US" id="amount" (onBlur)="onChangeFuel()" [(ngModel)]="stationary.amount" mode="decimal"></p-inputNumber>
                     </div>
                     <div class="field md:col-2 sm:col-3">
                         <label for="co2">CO2</label>
-                        <p-inputNumber id="co2" [(ngModel)]="stationary.co2" mode="decimal"></p-inputNumber>
+                        <p-inputNumber locale="en-US" minFractionDigits="8" id="co2" [(ngModel)]="stationary.co2" mode="decimal"></p-inputNumber>
                     </div>
                     <div class="field md:col-2 sm:col-3">
                         <label for="ch4">CH4</label>
-                        <p-inputNumber id="ch4" [(ngModel)]="stationary.ch4" mode="decimal"></p-inputNumber>
+                        <p-inputNumber locale="en-US" minFractionDigits="8" id="ch4" [(ngModel)]="stationary.ch4" mode="decimal"></p-inputNumber>
                     </div>
                     <div class="field md:col-2 sm:col-3">
                         <label for="n2o">N2O</label>
-                        <p-inputNumber id="n2o" [(ngModel)]="stationary.n2o" mode="decimal"></p-inputNumber>
+                        <p-inputNumber locale="en-US" minFractionDigits="8" id="n2o" [(ngModel)]="stationary.n2o" mode="decimal"></p-inputNumber>
                     </div>
                     
                 </div>

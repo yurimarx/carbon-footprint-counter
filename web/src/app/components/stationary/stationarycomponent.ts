@@ -58,7 +58,8 @@ export class StationaryComponent implements OnInit {
     }
 
     listEmissionFactors() {
-        this.emissionFactorService.list().subscribe(
+        // get stationary fuel only - 1
+        this.emissionFactorService.listBySegment(1).subscribe(
             response => {
                 this.emissionFactors = response
             }
@@ -79,6 +80,22 @@ export class StationaryComponent implements OnInit {
     deleteStationary(stationary: Stationary) {
         this.deleteStationaryDialog = true;
         this.stationary = {...stationary};
+    }
+
+    onChangeFuel(event) {
+        if (this.stationary.amount != null && this.stationary.fuel != null) {
+            this.calculateEmissions(this.stationary.fuel, this.stationary.amount)
+        }
+    }
+
+    calculateEmissions(fuelId: number, amount: number) {
+        this.stationaryService.calculate(fuelId, amount).subscribe(
+            response => {
+                this.stationary.co2 = response.co2;
+                this.stationary.ch4 = response.ch4;
+                this.stationary.n2o = response.n2o;
+            }
+        );
     }
 
     confirmDelete(){

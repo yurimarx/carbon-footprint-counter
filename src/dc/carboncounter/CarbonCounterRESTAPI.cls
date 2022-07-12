@@ -46,11 +46,16 @@ XData UrlMap [ XMLNamespace = "http://www.intersystems.com/urlmap" ]
 <Route Url="/emissionfactors/:id" Method="DELETE" Call="DeleteEmissionFactor"/>
 <!-- Post an emission factor -->
 <Route Url="/emissionfactors" Method="POST" Call="MergeEmissionFactor"/>
+<!-- get emission factors by segment -->
+<Route Url="/emissionfactors/segment/:id" Method="GET" Call="GetAllEmissionFactorBySegment"/>
+
 
 <!-- Get all records of stationary combustion class -->
 <Route Url="/stationary" Method="GET" Call="GetAllStationary"/>
 <!-- GET method to return JSON for a given stationary combustion id-->
 <Route Url="/stationary/:id" Method="GET" Call="GetStationary"/>
+<!-- GET method to return carbon calculation JSON for a given emission factor id-->
+<Route Url="/stationary/calculate/:id/:amount" Method="GET" Call="GetStationaryCalculation"/>
 <!-- Delete an stationary combustion with id-->
 <Route Url="/stationary/:id" Method="DELETE" Call="DeleteStationary"/>
 <!-- Post an stationary combustion -->
@@ -334,6 +339,29 @@ ClassMethod GetAllEmissionFactor() As %Status
     Quit tSC
 }
 
+/// Retrieve all the records of Emission Factor by segment
+ClassMethod GetAllEmissionFactorBySegment(id As %Integer) As %Status
+{
+
+    #dim tSC As %Status = $$$OK
+
+    Set tSC = ..GetSQLResults("SELECT ID FROM dc_carboncounter.EmissionFactor WHERE emissionType->emissionSegment->emissionSegmentId = ?", .rset, id)
+  
+    Set %response.ContentType = ..#CONTENTTYPEJSON
+    Write "["
+    if rset.%Next() {
+        Set obj = ##class(dc.carboncounter.EmissionFactor).%OpenId(rset.ID)    
+        Do obj.%JSONExport()
+    }
+    While rset.%Next() {   
+        Write ","
+        Set obj = ##class(dc.carboncounter.EmissionFactor).%OpenId(rset.ID)    
+        Do obj.%JSONExport()
+    }
+    Write "]"
+    Quit tSC
+}
+
 /// Return one record of Emission Factor
 ClassMethod GetEmissionFactor(id As %Integer) As %Status
 {
@@ -427,6 +455,29 @@ ClassMethod GetStationary(id As %Integer) As %Status
     If '$IsObject(obj) Quit ..Http404()
 
     Do obj.%JSONExport()
+
+    Quit tSC
+}
+
+/// Return the carbon calculation of Stationary Combustion
+ClassMethod GetStationaryCalculation(id As %Integer, amount As %Double) As %Status
+{
+	#dim tSC As %Status = $$$OK
+    #dim e As %Exception.AbstractException
+
+    Set %response.ContentType = ..#CONTENTTYPEJSON
+
+    Set obj = ##class(dc.carboncounter.EmissionFactor).%OpenId(id)
+
+    Set result = ##class(dc.carboncounter.StationaryCombustion).%New()
+    Set result.fuel = obj
+    Set result.co2 = obj.co2Factor * (amount/1000)
+    Set result.ch4 = obj.ch4Factor * (amount/1000000)
+    Set result.n2o = obj.n2oFactor * (amount/1000000)
+
+    If '$IsObject(obj) Quit ..Http404()
+
+    Do result.%JSONExport()
 
     Quit tSC
 }

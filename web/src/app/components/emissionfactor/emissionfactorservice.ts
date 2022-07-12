@@ -18,6 +18,10 @@ export class EmissionFactorService {
     return this.http.get<EmissionFactor[]>(this.url).pipe(take(1));
   }
 
+  public listBySegment(id: number): Observable<EmissionFactor[]> {
+    return this.http.get<EmissionFactor[]>(`${this.url}/segment/${id}`).pipe(take(1));
+  }
+
   public get(emissionFactorId: number): Observable<EmissionFactor> {
     return this.http.get<EmissionFactor>(`${this.url}/${emissionFactorId}`).pipe(take(1));
   }
