@@ -1,0 +1,145 @@
+<div class="grid">
+    <div class="col-12">
+        <div class="card">
+            <p-toast></p-toast>
+            <p-toolbar styleClass="mb-4">
+                <ng-template pTemplate="left">
+                    <div class="my-2">
+                        <button pButton pRipple label="New" icon="pi pi-plus" class="p-button-success mr-2" (click)="openNew()"></button>
+                    </div>
+                </ng-template>
+
+                <ng-template pTemplate="right">
+                    <!--p-fileUpload mode="basic" accept="image/*" [maxFileSize]="1000000" label="Import" chooseLabel="Import" class="mr-2 inline-block"></p-fileUpload-->
+                    <button pButton pRipple label="Export" icon="pi pi-upload" class="p-button-help" (click)="dt.exportCSV()"></button>
+                </ng-template>
+            </p-toolbar>
+
+            <p-table #dt [value]="stationaries" [columns]="cols" responsiveLayout="scroll" [rows]="10" 
+                         [globalFilterFields]="['fuelName','year']" [rows]="10" [paginator]="true" 
+                         [rowsPerPageOptions]="[10,20,30]" [showCurrentPageReport]="true" 
+                         currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" 
+                         [rowHover]="true" dataKey="stationaryCombustionId">
+                <ng-template pTemplate="caption">
+                    <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
+                        <h5 class="m-0">Calculate Stationary Emissions</h5>
+                        <span class="block mt-2 md:mt-0 p-input-icon-left">
+                            <i class="pi pi-search"></i>
+                            <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')" placeholder="Search..." />
+                        </span>
+                    </div>
+                </ng-template>
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th pSortableColumn="facilityId">Facility ID <p-sortIcon field="facilityId"></p-sortIcon></th>
+                        <th pSortableColumn="year">Year <p-sortIcon field="year"></p-sortIcon></th>
+                        <th pSortableColumn="fuelName">Fuel <p-sortIcon field="fuelName"></p-sortIcon></th>
+                        <th pSortableColumn="amount">Amount <p-sortIcon field="amount"></p-sortIcon></th>
+                        <th pSortableColumn="co2">CO2 <p-sortIcon field="co2"></p-sortIcon></th>
+                        <th pSortableColumn="ch4">CH4 <p-sortIcon field="ch4"></p-sortIcon></th>
+                        <th pSortableColumn="n2o">N2O <p-sortIcon field="n2o"></p-sortIcon></th>
+                        <th></th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-stationary>
+                    <tr>
+                        <td style="width:10%; min-width:10rem;">
+                            <span class="p-column-title">Facility ID</span>
+                            {{stationary.facilityId}}
+                        </td>
+                        <td style="width:10%; min-width:10rem;">
+                            <span class="p-column-title">Year</span>
+                            {{stationary.year}}
+                        </td>
+                        <td style="width:35%; min-width:10rem;">
+                            <span class="p-column-title">Fuel</span>
+                            {{stationary.fuel}}
+                        </td>
+                        <td style="width:10%; min-width:10rem;">
+                            <span class="p-column-title">Amount</span>
+                            {{stationary.amount}}
+                        </td>
+                        <td style="width:10%; min-width:10rem;">
+                            <span class="p-column-title">CO2</span>
+                            {{stationary.co2}}
+                        </td>
+                        <td style="width:10%; min-width:10rem;">
+                            <span class="p-column-title">CH4</span>
+                            {{stationary.ch4}}
+                        </td>
+                        <td style="width:10%; min-width:10rem;">
+                            <span class="p-column-title">N2O</span>
+                            {{stationary.n2o}}
+                        </td>
+                        
+                        <td>
+                            <div class="flex">
+                                <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success mr-2" (click)="editStationary(stationary)"></button>
+                                <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning" (click)="deleteStationary(stationary)"></button>
+                            </div>
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div>
+
+        <p-dialog [(visible)]="stationaryDialog" [style]="{width: '80%'}" 
+                    header="Stationary Emission Details" [modal]="true" class="p-fluid">
+            <ng-template pTemplate="content">
+                <div class="grid">
+                    <div class="field md:col-3 sm:col-4">
+                        <label for="facilityid">Facility ID</label>
+                        <input type="text" pInputText id="facilityid" [(ngModel)]="stationary.facilityId" />
+                    </div>
+                    <div class="field md:col-2 sm:col-3">
+                        <label for="year">Year</label>
+                        <input type="text" pInputText id="year" [(ngModel)]="stationary.year" />
+                    </div>
+                    <div class="field md:col-5 sm:col-4">
+                        <label for="fuel">Fuel</label>
+                        <p-dropdown id="fuel" [options]="emissionFactors" 
+                                    optionLabel="emissionName" optionValue="emissionFactorId" dataKey="emissionFactorId"
+                                    [(ngModel)]="stationary.fuel" placeholder="Select a Fuel"></p-dropdown>
+                    </div>
+                    <div class="field md:col-2 sm:col-3">
+                        <label for="amout">Amount</label>
+                        <p-inputNumber id="amount" [(ngModel)]="stationary.amount" mode="decimal"></p-inputNumber>
+                    </div>
+                    <div class="field md:col-2 sm:col-3">
+                        <label for="co2">CO2</label>
+                        <p-inputNumber id="co2" [(ngModel)]="stationary.co2" mode="decimal"></p-inputNumber>
+                    </div>
+                    <div class="field md:col-2 sm:col-3">
+                        <label for="ch4">CH4</label>
+                        <p-inputNumber id="ch4" [(ngModel)]="stationary.ch4" mode="decimal"></p-inputNumber>
+                    </div>
+                    <div class="field md:col-2 sm:col-3">
+                        <label for="n2o">N2O</label>
+                        <p-inputNumber id="n2o" [(ngModel)]="stationary.n2o" mode="decimal"></p-inputNumber>
+                    </div>
+                    
+                </div>
+                
+                <br/>
+
+            </ng-template>
+
+            <ng-template pTemplate="footer">
+                <button pButton pRipple label="Cancel" icon="pi pi-times" class="p-button-text" (click)="hideDialog()"></button>
+                <button pButton pRipple label="Save" icon="pi pi-check" class="p-button-text" (click)="saveStationary()"></button>
+            </ng-template>
+        </p-dialog>
+
+        <p-dialog [(visible)]="deleteStationaryDialog" header="Confirm" [modal]="true" [style]="{width:'450px'}">
+            <div class="flex align-items-center justify-content-center">
+                <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem"></i>
+                <span *ngIf="stationary">Are you sure you want to delete <b>{{stationary.facilityId}} on {{stationary.year}}</b>?</span>
+            </div>
+            <ng-template pTemplate="footer">
+                <button pButton pRipple icon="pi pi-times" class="p-button-text" label="No" (click)="deleteStationaryDialog = false"></button>
+                <button pButton pRipple icon="pi pi-check" class="p-button-text" label="Yes" (click)="confirmDelete()"></button>
+            </ng-template>
+        </p-dialog>
+
+    </div>
+</div>
