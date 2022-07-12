@@ -28,7 +28,7 @@ export class AppMenuComponent implements OnInit {
                 label: 'Footprint Calculator',
                 items: [
                     {label: 'Stationary Combustion', icon: 'pi pi-fw pi-sun', routerLink: ['/pages/stationary']},
-                    {label: 'Mobile Combustion', icon: 'pi pi-fw pi-car', routerLink: ['/pages/emissionsegment']},
+                    {label: 'Mobile Combustion', icon: 'pi pi-fw pi-car', routerLink: ['/pages/mobile']},
                     {label: 'Transportation', icon: 'pi pi-fw pi-send', routerLink: ['/pages/emissiontype']},
                     {label: 'Purchased Electricity', icon: 'pi pi-fw pi-bolt', routerLink: ['/pages/emissionfactor']},
                 ]

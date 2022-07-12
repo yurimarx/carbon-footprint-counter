@@ -32,3 +32,6 @@ $ docker-compose up -d
 # To be done:
 1. Complete Emission Factor UI - prevision july, 12
 2. Create Emission Calculator UI - prevision july, 13
+
+# Credits
+I used the database and the rules from Green House Gas Protocol: https://ghgprotocol.org/ghg-emissions-calculation-tool

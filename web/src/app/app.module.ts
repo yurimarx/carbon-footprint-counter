@@ -123,6 +123,8 @@ import { EmissionFactorComponent } from './components/emissionfactor/emissionfac
 import { EmissionFactorService } from './components/emissionfactor/emissionfactorservice';
 import { StationaryService } from './components/stationary/stationaryservice';
 import { StationaryComponent } from './components/stationary/stationarycomponent';
+import { MobileComponent } from './components/mobile/mobilecomponent';
+import { MobileService } from './components/mobile/mobileservice';
 
 @NgModule({
     imports: [
@@ -228,6 +230,7 @@ import { StationaryComponent } from './components/stationary/stationarycomponent
         EmissionTypeComponent,
         EmissionFactorComponent,
         StationaryComponent,
+        MobileComponent,
         BlockViewer,
         ErrorComponent,
         NotfoundComponent,
@@ -238,7 +241,8 @@ import { StationaryComponent } from './components/stationary/stationarycomponent
         {provide: LocationStrategy, useClass: HashLocationStrategy},
         CountryService, CustomerService, EventService, IconService, NodeService,
         PhotoService, ProductService, EmissionUnitService, EmissionSegmentService, 
-        EmissionTypeService, EmissionFactorService, StationaryService, MenuService, ConfigService
+        EmissionTypeService, EmissionFactorService, StationaryService, MobileService,
+        MenuService, ConfigService
     ],
     bootstrap: [AppComponent]
     
