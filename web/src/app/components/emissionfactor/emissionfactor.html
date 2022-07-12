@@ -58,21 +58,78 @@
             </p-table>
         </div>
 
-        <p-dialog [(visible)]="emissionFactorDialog" [style]="{width: '450px'}" 
+        <p-dialog [(visible)]="emissionFactorDialog" [style]="{width: '80%'}" 
                     header="Emission Factor Details" [modal]="true" class="p-fluid">
             <ng-template pTemplate="content">
-                <div class="field">
-                    <label for="name">Name</label>
-                    <input type="text" pInputText id="name" [(ngModel)]="emissionFactor.emissionName" required autofocus [ngClass]="{'ng-invalid ng-dirty' : submitted && !emissionFactor.name}"/>
-                    <small class="ng-dirty ng-invalid" *ngIf="submitted && !emissionFactor.emissionName">Name is required.</small>
+                <div class="grid">
+                    <div class="field md:col-8 sm:col-7">
+                        <label for="name">Name</label>
+                        <input type="text" pInputText id="name" [(ngModel)]="emissionFactor.emissionName" required autofocus [ngClass]="{'ng-invalid ng-dirty' : submitted && !emissionFactor.name}"/>
+                        <small class="ng-dirty ng-invalid" *ngIf="submitted && !emissionFactor.emissionName">Name is required.</small>
+                    </div>
+                    <div class="field md:col-2 sm:col-3">
+                        <label for="emissionType">Emission Type</label>
+                        <p-dropdown id="emissionType" [options]="emissionTypes" 
+                                    optionLabel="name" optionValue="emissionTypeId" dataKey="emissionTypeId"
+                                    [(ngModel)]="emissionFactor.emissionType" placeholder="Select a Emission Type"></p-dropdown>
+                    </div>
+                    <div class="field md:col-2 sm:col-3">
+                        <label for="unit">Emission Unit</label>
+                        <p-dropdown id="unit" [options]="emissionUnits" 
+                                    optionLabel="name" optionValue="emissionUnitId" dataKey="emissionUnitId"
+                                    [(ngModel)]="emissionFactor.unit" placeholder="Select a Emission Unit"></p-dropdown>
+                    </div>
+                    <div class="field md:col-2 sm:col-3">
+                        <label for="hhv">HHV</label>
+                        <p-inputNumber id="hhv" [(ngModel)]="emissionFactor.hhv" mode="decimal"></p-inputNumber>
+                    </div>
+                    <div class="field md:col-2 sm:col-3">
+                        <label for="co2Factor">CO2</label>
+                        <p-inputNumber id="co2Factor" [(ngModel)]="emissionFactor.co2Factor" mode="decimal"></p-inputNumber>
+                    </div>
+                    <div class="field md:col-2 sm:col-3">
+                        <label for="ch4Factor">CH4</label>
+                        <p-inputNumber id="ch4Factor" [(ngModel)]="emissionFactor.ch4Factor" mode="decimal"></p-inputNumber>
+                    </div>
+                    <div class="field md:col-2 sm:col-3">
+                        <label for="n2oFactor">N2O</label>
+                        <p-inputNumber id="n2oFactor" [(ngModel)]="emissionFactor.n2oFactor" mode="decimal"></p-inputNumber>
+                    </div>
+                    <div class="field md:col-2 sm:col-3">
+                        <label for="biogenicCo2Factor">Biogenic CO2</label>
+                        <p-inputNumber id="biogenicCo2Factor" [(ngModel)]="emissionFactor.biogenicCo2Factor" mode="decimal"></p-inputNumber>
+                    </div>
+                    <div class="field md:col-2 sm:col-3">
+                        <label for="ar4">AR4</label>
+                        <p-inputNumber id="ar4" [(ngModel)]="emissionFactor.ar4" mode="decimal"></p-inputNumber>
+                    </div>
+                    <div class="field md:col-2 sm:col-3">
+                        <label for="ar5">AR5</label>
+                        <p-inputNumber id="ar5" [(ngModel)]="emissionFactor.ar5" mode="decimal"></p-inputNumber>
+                    </div>
+                    <div class="field md:col-2 sm:col-3">
+                        <label for="fuelEfficiency">Fuel Efficiency</label>
+                        <p-inputNumber id="fuelEfficiency" [(ngModel)]="emissionFactor.fuelEfficiency" mode="decimal"></p-inputNumber>
+                    </div>
+                    <div class="field md:col-2 sm:col-3">
+                        <label for="secondUnit">Second Unit</label>
+                        <p-inputNumber id="secondUnit" [(ngModel)]="emissionFactor.secondUnit" mode="decimal"></p-inputNumber>
+                    </div>
+                    <div class="field md:col-2 sm:col-3">
+                        <label for="co4kg">CO4 Kg</label>
+                        <p-inputNumber id="co4kg" [(ngModel)]="emissionFactor.co4kg" mode="decimal"></p-inputNumber>
+                    </div>
+                    <div class="field md:col-2 sm:col-3">
+                        <label for="no2kg">NO2 Kg</label>
+                        <p-inputNumber id="no2kg" [(ngModel)]="emissionFactor.no2kg" mode="decimal"></p-inputNumber>
+                    </div>
+                    <div class="field col-12">
+                        <label for="source">Source</label>
+                        <textarea [rows]="3" [cols]="30" [(ngModel)]="emissionFactor.source" id="source" pInputTextarea autoResize="autoResize"></textarea>
+                    </div>
+                    
                 </div>
-                <div class="field">
-                    <label for="emissionType">Emission Type</label>
-                    <p-dropdown id="emissionType" [options]="emissionTypes" 
-                                optionLabel="name" optionValue="emissionTypeId" dataKey="emissionTypeId"
-                                [(ngModel)]="emissionFactor.emissionType" placeholder="Select a Emission Type"></p-dropdown>
-                </div>
-
+                
                 <br/>
 
             </ng-template>

@@ -41,6 +41,7 @@ export class EmissionFactorComponent implements OnInit {
 
     ngOnInit() {
         this.listEmissionTypes();
+        this.listEmissionUnits();
         this.list();
 
         this.cols = [

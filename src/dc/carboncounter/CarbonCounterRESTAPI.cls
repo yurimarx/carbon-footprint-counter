@@ -47,6 +47,17 @@ XData UrlMap [ XMLNamespace = "http://www.intersystems.com/urlmap" ]
 <!-- Post an emission factor -->
 <Route Url="/emissionfactors" Method="POST" Call="MergeEmissionFactor"/>
 
+<!-- Get all records of stationary combustion class -->
+<Route Url="/stationary" Method="GET" Call="GetAllStationary"/>
+<!-- GET method to return JSON for a given stationary combustion id-->
+<Route Url="/stationary/:id" Method="GET" Call="GetStationary"/>
+<!-- Delete an stationary combustion with id-->
+<Route Url="/stationary/:id" Method="DELETE" Call="DeleteStationary"/>
+<!-- Post an stationary combustion -->
+<Route Url="/stationary" Method="POST" Call="MergeStationary"/>
+
+
+
 </Routes>
 }
 
@@ -369,6 +380,86 @@ ClassMethod DeleteEmissionFactor(id As %Integer) As %Status
 	#dim tSC As %Status = $$$OK
     #dim e As %Exception.AbstractException
     Set obj = ##class(dc.carboncounter.EmissionFactor).%OpenId(id)
+    If '$IsObject(obj) Return ..Http404()
+
+    $$$TOE(tSC,obj.%DeleteId(id))
+
+    Set %response.Status = 200
+
+    Set %response.ContentType = ..#CONTENTTYPEJSON
+
+    Quit tSC
+}
+
+/// Retrieve all the records of Stationary Combustion
+ClassMethod GetAllStationary() As %Status
+{
+
+    #dim tSC As %Status = $$$OK
+
+    Set tSC = ..GetSQLResults("SELECT ID FROM dc_carboncounter.StationaryCombustion", .rset)
+  
+    Set %response.ContentType = ..#CONTENTTYPEJSON
+    Write "["
+    if rset.%Next() {
+        Set obj = ##class(dc.carboncounter.StationaryCombustion).%OpenId(rset.ID)    
+        Do obj.%JSONExport()
+    }
+    While rset.%Next() {   
+        Write ","
+        Set obj = ##class(dc.carboncounter.StationaryCombustion).%OpenId(rset.ID)    
+        Do obj.%JSONExport()
+    }
+    Write "]"
+    Quit tSC
+}
+
+/// Return one record of Stationary Combustion
+ClassMethod GetStationary(id As %Integer) As %Status
+{
+	#dim tSC As %Status = $$$OK
+    #dim e As %Exception.AbstractException
+
+    Set %response.ContentType = ..#CONTENTTYPEJSON
+
+    Set obj = ##class(dc.carboncounter.StationaryCombustion).%OpenId(id)
+
+    If '$IsObject(obj) Quit ..Http404()
+
+    Do obj.%JSONExport()
+
+    Quit tSC
+}
+
+/// Creates or update an Stationary Combustion record
+ClassMethod MergeStationary() As %Status
+{
+	#dim tSC As %Status = $$$OK
+    #dim e As %Exception.AbstractException
+    Set data=%request.Content
+    
+    If data.stationaryCombustionId '= "" {
+        Set obj = ##class(dc.carboncounter.StationaryCombustion).%OpenId(data.stationaryCombustionId)
+    } Else {
+        Set obj = ##class(dc.carboncounter.StationaryCombustion).%New()
+    }
+    
+    $$$TOE(tSC,obj.%JSONImport(data))
+    $$$TOE(tSC,obj.%Save())
+
+    Set %response.Status = 204
+    Set %response.ContentType = ..#CONTENTTYPEJSON
+    Do obj.%JSONExport()
+
+    Quit tSC
+}
+
+/// Delete a record with id in Stationary Combustion
+ClassMethod DeleteStationary(id As %Integer) As %Status
+{
+	#dim tSC As %Status = $$$OK
+    #dim e As %Exception.AbstractException
+    Set obj = ##class(dc.carboncounter.StationaryCombustion).%OpenId(id)
     If '$IsObject(obj) Return ..Http404()
 
     $$$TOE(tSC,obj.%DeleteId(id))

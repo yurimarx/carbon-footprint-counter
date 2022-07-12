@@ -25,7 +25,16 @@ export class AppMenuComponent implements OnInit {
     ngOnInit() {
         this.model = [
             {
-                label: 'Carbon Counter',
+                label: 'Footprint Calculator',
+                items: [
+                    {label: 'Stationary Combustion', icon: 'pi pi-fw pi-sun', routerLink: ['/pages/emissionunit']},
+                    {label: 'Mobile Combustion', icon: 'pi pi-fw pi-car', routerLink: ['/pages/emissionsegment']},
+                    {label: 'Transportation', icon: 'pi pi-fw pi-send', routerLink: ['/pages/emissiontype']},
+                    {label: 'Purchased Electricity', icon: 'pi pi-fw pi-bolt', routerLink: ['/pages/emissionfactor']},
+                ]
+            },
+            {
+                label: 'Emission Database',
                 items: [
                     {label: 'Emission Unit', icon: 'pi pi-fw pi-user-edit', routerLink: ['/pages/emissionunit']},
                     {label: 'Emission Segment', icon: 'pi pi-fw pi-user-edit', routerLink: ['/pages/emissionsegment']},
