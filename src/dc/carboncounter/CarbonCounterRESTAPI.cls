@@ -589,6 +589,12 @@ ClassMethod GetMobileCalculation(id As %Integer, amount As %Double) As %Status
     Set result.ch4 = obj.ch4Factor * (amount/1000)
     Set result.n2o = obj.n2oFactor * (amount/1000)
 
+    If obj.fuelEfficiency '= "" {
+        Set result.co2 = result.co2 / obj.fuelEfficiency
+        Set result.ch4 = result.ch4 / obj.fuelEfficiency
+        Set result.n2o = result.n2o / obj.fuelEfficiency
+    }
+
     If '$IsObject(obj) Quit ..Http404()
 
     Do result.%JSONExport()
