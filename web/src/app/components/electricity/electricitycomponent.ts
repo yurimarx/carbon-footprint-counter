@@ -1,7 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { ConfirmationService, MessageService } from 'primeng/api';
+import { Subscription } from 'rxjs';
 import { EmissionFactor } from '../emissionfactor/emissionfactor';
 import { EmissionFactorService } from '../emissionfactor/emissionfactorservice';
+import { FootprintTotals } from '../FootprintTotals';
+import { Totals } from '../totals';
+import { TotalsService } from '../totalsservice';
 import { Electricity } from './electricity';
 import { ElectricityService } from './electricityservice';
 
@@ -22,6 +26,10 @@ export class ElectricityComponent implements OnInit {
 
     electricity: Electricity;
 
+    totals: Totals;
+
+    subscription: Subscription;
+
     submitted: boolean;
 
     cols: any[];
@@ -30,6 +38,8 @@ export class ElectricityComponent implements OnInit {
 
     constructor(private electricityService: ElectricityService, 
                 private emissionFactorService: EmissionFactorService, 
+                private totalsService: TotalsService,
+                private footprintTotals: FootprintTotals,
                 private messageService: MessageService,
                 private confirmationService: ConfirmationService) {}
 
@@ -106,7 +116,8 @@ export class ElectricityComponent implements OnInit {
                 this.deleteElectricityDialog = false;
                 this.messageService.add({severity: 'success', summary: 'Successful', detail: 'Electricity Deleted', life: 3000});
                 this.electricity = new Electricity();
-                this.list()
+                this.list();
+                this.getTotals();
             }
         );
         
@@ -126,10 +137,20 @@ export class ElectricityComponent implements OnInit {
                 this.electricity = response
                 this.electricityDialog = false;
                 this.messageService.add({severity: 'success', summary: 'Successful', detail: 'Electricity saved', life: 3000});
-                this.list()
+                this.list();
+                this.getTotals();
             }
         );
+    }
 
+    getTotals() {
+        this.totalsService.getTotals().subscribe(
+            response => {
+                this.totals = response;
+                this.footprintTotals.changeFootprintValues(
+                    this.totals.co2 + '|' + this.totals.ch4 + '|' + this.totals.n2o);
+            }
+        );
     }
 
     

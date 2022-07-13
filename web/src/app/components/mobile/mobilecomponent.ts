@@ -1,7 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { ConfirmationService, MessageService } from 'primeng/api';
+import { Subscription } from 'rxjs';
 import { EmissionFactor } from '../emissionfactor/emissionfactor';
 import { EmissionFactorService } from '../emissionfactor/emissionfactorservice';
+import { FootprintTotals } from '../FootprintTotals';
+import { Totals } from '../totals';
+import { TotalsService } from '../totalsservice';
 import { Mobile } from './mobile';
 import { MobileService } from './mobileservice';
 
@@ -28,8 +32,14 @@ export class MobileComponent implements OnInit {
 
     rowsPerPageOptions = [5, 10, 20];
 
+    subscription: Subscription;
+
+    totals: Totals;
+
     constructor(private mobileService: MobileService, 
                 private emissionFactorService: EmissionFactorService, 
+                private totalsService: TotalsService,
+                private footprintTotals: FootprintTotals,
                 private messageService: MessageService,
                 private confirmationService: ConfirmationService) {}
 
@@ -106,7 +116,8 @@ export class MobileComponent implements OnInit {
                 this.deleteMobileDialog = false;
                 this.messageService.add({severity: 'success', summary: 'Successful', detail: 'Mobile Combustion Deleted', life: 3000});
                 this.mobile = new Mobile();
-                this.list()
+                this.list();
+                this.getTotals();
             }
         );
         
@@ -126,10 +137,20 @@ export class MobileComponent implements OnInit {
                 this.mobile = response
                 this.mobileDialog = false;
                 this.messageService.add({severity: 'success', summary: 'Successful', detail: 'Mobile Combustion saved', life: 3000});
-                this.list()
+                this.list();
+                this.getTotals();
             }
         );
+    }
 
+    getTotals() {
+        this.totalsService.getTotals().subscribe(
+            response => {
+                this.totals = response;
+                this.footprintTotals.changeFootprintValues(
+                    this.totals.co2 + '|' + this.totals.ch4 + '|' + this.totals.n2o);
+            }
+        );
     }
 
     

@@ -1,7 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { ConfirmationService, MessageService } from 'primeng/api';
+import { Subscription } from 'rxjs';
 import { EmissionFactor } from '../emissionfactor/emissionfactor';
 import { EmissionFactorService } from '../emissionfactor/emissionfactorservice';
+import { FootprintTotals } from '../FootprintTotals';
+import { Totals } from '../totals';
+import { TotalsService } from '../totalsservice';
 import { Transportation } from './transportation';
 import { TransportationService } from './transportationservice';
 
@@ -24,12 +28,18 @@ export class TransportationComponent implements OnInit {
 
     submitted: boolean;
 
+    totals: Totals;
+
     cols: any[];
 
     rowsPerPageOptions = [5, 10, 20];
 
+    subscription: Subscription;
+
     constructor(private transportationService: TransportationService, 
                 private emissionFactorService: EmissionFactorService, 
+                private totalsService: TotalsService,
+                private footprintTotals: FootprintTotals,
                 private messageService: MessageService,
                 private confirmationService: ConfirmationService) {}
 
@@ -106,11 +116,10 @@ export class TransportationComponent implements OnInit {
                 this.deleteTransportationDialog = false;
                 this.messageService.add({severity: 'success', summary: 'Successful', detail: 'Transportation Deleted', life: 3000});
                 this.transportation = new Transportation();
-                this.list()
+                this.list();
+                this.getTotals();
             }
         );
-        
-        
     }
 
     hideDialog() {
@@ -126,10 +135,21 @@ export class TransportationComponent implements OnInit {
                 this.transportation = response
                 this.transportationDialog = false;
                 this.messageService.add({severity: 'success', summary: 'Successful', detail: 'Transportation saved', life: 3000});
-                this.list()
+                this.list();
+                this.getTotals();
             }
         );
 
+    }
+
+    getTotals() {
+        this.totalsService.getTotals().subscribe(
+            response => {
+                this.totals = response;
+                this.footprintTotals.changeFootprintValues(
+                    this.totals.co2 + '|' + this.totals.ch4 + '|' + this.totals.n2o);
+            }
+        );
     }
 
     

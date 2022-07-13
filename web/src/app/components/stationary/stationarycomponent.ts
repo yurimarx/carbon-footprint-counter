@@ -1,7 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { ConfirmationService, MessageService } from 'primeng/api';
+import { Subscription } from 'rxjs';
 import { EmissionFactor } from '../emissionfactor/emissionfactor';
 import { EmissionFactorService } from '../emissionfactor/emissionfactorservice';
+import { FootprintTotals } from '../FootprintTotals';
+import { Totals } from '../totals';
+import { TotalsService } from '../totalsservice';
 import { Stationary } from './stationary';
 import { StationaryService } from './stationaryservice';
 
@@ -22,15 +26,21 @@ export class StationaryComponent implements OnInit {
 
     stationary: Stationary;
 
+    totals: Totals;
+
     submitted: boolean;
 
     cols: any[];
 
     rowsPerPageOptions = [5, 10, 20];
 
+    subscription: Subscription;
+
     constructor(private stationaryService: StationaryService, 
                 private emissionFactorService: EmissionFactorService, 
                 private messageService: MessageService,
+                private totalsService: TotalsService,
+                private footprintTotals: FootprintTotals,
                 private confirmationService: ConfirmationService) {}
 
     ngOnInit() {
@@ -107,6 +117,7 @@ export class StationaryComponent implements OnInit {
                 this.messageService.add({severity: 'success', summary: 'Successful', detail: 'Stationary Combustion Deleted', life: 3000});
                 this.stationary = new Stationary();
                 this.list()
+                this.getTotals();
             }
         );
         
@@ -123,13 +134,24 @@ export class StationaryComponent implements OnInit {
 
         this.stationaryService.save(this.stationary).subscribe(
             response => {
-                this.stationary = response
+                this.stationary = response;
                 this.stationaryDialog = false;
                 this.messageService.add({severity: 'success', summary: 'Successful', detail: 'Stationary Combustion saved', life: 3000});
-                this.list()
+                this.list();
+                this.getTotals();
             }
         );
 
+    }
+
+    getTotals() {
+        this.totalsService.getTotals().subscribe(
+            response => {
+                this.totals = response;
+                this.footprintTotals.changeFootprintValues(
+                    this.totals.co2 + '|' + this.totals.ch4 + '|' + this.totals.n2o);
+            }
+        );
     }
 
     

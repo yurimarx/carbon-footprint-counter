@@ -95,6 +95,9 @@ XData UrlMap [ XMLNamespace = "http://www.intersystems.com/urlmap" ]
 <!-- Post an electricity -->
 <Route Url="/electricity" Method="POST" Call="MergeElectricity"/>
 
+<!-- Get all records of electricity class -->
+<Route Url="/totals" Method="GET" Call="GetTotals"/>
+
 
 </Routes>
 }
@@ -866,6 +869,64 @@ ClassMethod DeleteElectricity(id As %Integer) As %Status
     Set %response.Status = 200
 
     Set %response.ContentType = ..#CONTENTTYPEJSON
+
+    Quit tSC
+}
+
+/// Retrieve emission totals
+ClassMethod GetTotals() As %Status
+{
+
+    #dim tSC As %Status = $$$OK
+
+    Set tSC = ..GetSQLResults("SELECT sum(ch4) ch4, sum(co2) co2, sum(n2o) n2o "_
+                                "FROM dc_carboncounter.StationaryCombustion", .rsetStationary)
+    
+    Set tSC = ..GetSQLResults("SELECT sum(ch4) ch4, sum(co2) co2, sum(n2o) n2o "_
+                                "FROM dc_carboncounter.MobileCombustion", .rsetMobile)
+  
+    Set tSC = ..GetSQLResults("SELECT sum(ch4) ch4, sum(co2) co2, sum(n2o) n2o "_
+                                "FROM dc_carboncounter.Transportation", .rsetTransportation)
+    
+    Set tSC = ..GetSQLResults("SELECT sum(ch4) ch4, sum(co2) co2, sum(n2o) n2o "_
+                                "FROM dc_carboncounter.Electricity", .rsetElectricity)
+    
+    Set co2 = 0
+    Set ch4 = 0
+    Set n2o = 0
+
+    If rsetStationary.%Next() {
+        Set co2 = co2 + rsetStationary.co2
+        Set ch4 = ch4 + rsetStationary.ch4
+        Set n2o = n2o + rsetStationary.n2o
+    }
+
+    If rsetMobile.%Next() {
+        Set co2 = co2 + rsetMobile.co2
+        Set ch4 = ch4 + rsetMobile.ch4
+        Set n2o = n2o + rsetMobile.n2o
+    }
+
+    If rsetTransportation.%Next() {
+        Set co2 = co2 + rsetTransportation.co2
+        Set ch4 = ch4 + rsetTransportation.ch4
+        Set n2o = n2o + rsetTransportation.n2o
+    }
+
+    If rsetElectricity.%Next() {
+        Set co2 = co2 + rsetElectricity.co2
+        Set ch4 = ch4 + rsetElectricity.ch4
+        Set n2o = n2o + rsetElectricity.n2o
+    }
+
+    Set result = {}
+    Set result.co2 = co2
+    Set result.ch4 = ch4
+    Set result.n2o = n2o
+    
+    Set %response.ContentType = ..#CONTENTTYPEJSON 
+    
+    Write result.%ToJSON()
 
     Quit tSC
 }
