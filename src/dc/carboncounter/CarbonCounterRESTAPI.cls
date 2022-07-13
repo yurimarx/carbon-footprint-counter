@@ -72,6 +72,28 @@ XData UrlMap [ XMLNamespace = "http://www.intersystems.com/urlmap" ]
 <!-- Post an mobile combustion -->
 <Route Url="/mobile" Method="POST" Call="MergeMobile"/>
 
+<!-- Get all records of transportation class -->
+<Route Url="/transportation" Method="GET" Call="GetAllTransportation"/>
+<!-- GET method to return JSON for a given transportaion id-->
+<Route Url="/transportation/:id" Method="GET" Call="GetTransportation"/>
+<!-- GET method to return carbon calculation JSON for a given emission factor id-->
+<Route Url="/transportation/calculate/:id/:amount" Method="GET" Call="GetTransportationCalculation"/>
+<!-- Delete a transportation with id-->
+<Route Url="/transportation/:id" Method="DELETE" Call="DeleteTransportation"/>
+<!-- Post a transportation -->
+<Route Url="/transportation" Method="POST" Call="MergeTransportation"/>
+
+
+<!-- Get all records of electricity class -->
+<Route Url="/electricity" Method="GET" Call="GetAllElectricity"/>
+<!-- GET method to return JSON for a given electricity id-->
+<Route Url="/electricity/:id" Method="GET" Call="GetElectricity"/>
+<!-- GET method to return carbon calculation JSON for a given emission factor id-->
+<Route Url="/electricity/calculate/:id/:amount" Method="GET" Call="GetElectricityCalculation"/>
+<!-- Delete an electricity with id-->
+<Route Url="/electricity/:id" Method="DELETE" Call="DeleteElectricity"/>
+<!-- Post an electricity -->
+<Route Url="/electricity" Method="POST" Call="MergeElectricity"/>
 
 
 </Routes>
@@ -631,6 +653,212 @@ ClassMethod DeleteMobile(id As %Integer) As %Status
 	#dim tSC As %Status = $$$OK
     #dim e As %Exception.AbstractException
     Set obj = ##class(dc.carboncounter.MobileCombustion).%OpenId(id)
+    If '$IsObject(obj) Return ..Http404()
+
+    $$$TOE(tSC,obj.%DeleteId(id))
+
+    Set %response.Status = 200
+
+    Set %response.ContentType = ..#CONTENTTYPEJSON
+
+    Quit tSC
+}
+
+/// Retrieve all the records of Transportation
+ClassMethod GetAllTransportation() As %Status
+{
+
+    #dim tSC As %Status = $$$OK
+
+    Set tSC = ..GetSQLResults("SELECT ID FROM dc_carboncounter.Transportation", .rset)
+  
+    Set %response.ContentType = ..#CONTENTTYPEJSON
+    Write "["
+    if rset.%Next() {
+        Set obj = ##class(dc.carboncounter.Transportation).%OpenId(rset.ID)    
+        Do obj.%JSONExport()
+    }
+    While rset.%Next() {   
+        Write ","
+        Set obj = ##class(dc.carboncounter.Transportation).%OpenId(rset.ID)    
+        Do obj.%JSONExport()
+    }
+    Write "]"
+    Quit tSC
+}
+
+/// Return one record of Transportation
+ClassMethod GetTransportation(id As %Integer) As %Status
+{
+	#dim tSC As %Status = $$$OK
+    #dim e As %Exception.AbstractException
+
+    Set %response.ContentType = ..#CONTENTTYPEJSON
+
+    Set obj = ##class(dc.carboncounter.Transportation).%OpenId(id)
+
+    If '$IsObject(obj) Quit ..Http404()
+
+    Do obj.%JSONExport()
+
+    Quit tSC
+}
+
+/// Return the carbon calculation of Transportation
+ClassMethod GetTransportationCalculation(id As %Integer, amount As %Double) As %Status
+{
+	#dim tSC As %Status = $$$OK
+    #dim e As %Exception.AbstractException
+
+    Set %response.ContentType = ..#CONTENTTYPEJSON
+
+    Set obj = ##class(dc.carboncounter.EmissionFactor).%OpenId(id)
+
+    Set result = ##class(dc.carboncounter.Transportation).%New()
+    Set result.fuel = obj
+    Set result.co2 = obj.co2Factor * (amount/1000)
+    Set result.ch4 = obj.ch4Factor * (amount/1000)
+    Set result.n2o = obj.n2oFactor * (amount/1000)
+
+    If '$IsObject(obj) Quit ..Http404()
+
+    Do result.%JSONExport()
+
+    Quit tSC
+}
+
+/// Creates or update a Transportation record
+ClassMethod MergeTransportation() As %Status
+{
+	#dim tSC As %Status = $$$OK
+    #dim e As %Exception.AbstractException
+    Set data=%request.Content
+    
+    If data.mobileCombustionId '= "" {
+        Set obj = ##class(dc.carboncounter.Transportation).%OpenId(data.transportationId)
+    } Else {
+        Set obj = ##class(dc.carboncounter.Transportation).%New()
+    }
+    
+    $$$TOE(tSC,obj.%JSONImport(data))
+    $$$TOE(tSC,obj.%Save())
+
+    Set %response.Status = 204
+    Set %response.ContentType = ..#CONTENTTYPEJSON
+    Do obj.%JSONExport()
+
+    Quit tSC
+}
+
+/// Delete a record with id in Transportation
+ClassMethod DeleteTransportation(id As %Integer) As %Status
+{
+	#dim tSC As %Status = $$$OK
+    #dim e As %Exception.AbstractException
+    Set obj = ##class(dc.carboncounter.Transportation).%OpenId(id)
+    If '$IsObject(obj) Return ..Http404()
+
+    $$$TOE(tSC,obj.%DeleteId(id))
+
+    Set %response.Status = 200
+
+    Set %response.ContentType = ..#CONTENTTYPEJSON
+
+    Quit tSC
+}
+
+/// Retrieve all the records of Electricity
+ClassMethod GetAllElectricity() As %Status
+{
+
+    #dim tSC As %Status = $$$OK
+
+    Set tSC = ..GetSQLResults("SELECT ID FROM dc_carboncounter.Electricity", .rset)
+  
+    Set %response.ContentType = ..#CONTENTTYPEJSON
+    Write "["
+    if rset.%Next() {
+        Set obj = ##class(dc.carboncounter.Electricity).%OpenId(rset.ID)    
+        Do obj.%JSONExport()
+    }
+    While rset.%Next() {   
+        Write ","
+        Set obj = ##class(dc.carboncounter.Electricity).%OpenId(rset.ID)    
+        Do obj.%JSONExport()
+    }
+    Write "]"
+    Quit tSC
+}
+
+/// Return one record of Electricity
+ClassMethod GetElectricity(id As %Integer) As %Status
+{
+	#dim tSC As %Status = $$$OK
+    #dim e As %Exception.AbstractException
+
+    Set %response.ContentType = ..#CONTENTTYPEJSON
+
+    Set obj = ##class(dc.carboncounter.Electricity).%OpenId(id)
+
+    If '$IsObject(obj) Quit ..Http404()
+
+    Do obj.%JSONExport()
+
+    Quit tSC
+}
+
+/// Return the carbon calculation of Electricity
+ClassMethod GetElectricityCalculation(id As %Integer, amount As %Double) As %Status
+{
+	#dim tSC As %Status = $$$OK
+    #dim e As %Exception.AbstractException
+
+    Set %response.ContentType = ..#CONTENTTYPEJSON
+
+    Set obj = ##class(dc.carboncounter.EmissionFactor).%OpenId(id)
+
+    Set result = ##class(dc.carboncounter.Electricity).%New()
+    Set result.fuel = obj
+    Set result.co2 = obj.co2Factor * (amount/1000)
+    Set result.ch4 = obj.ch4Factor * (amount/1000)
+    Set result.n2o = obj.n2oFactor * (amount/1000)
+
+    If '$IsObject(obj) Quit ..Http404()
+
+    Do result.%JSONExport()
+
+    Quit tSC
+}
+
+/// Creates or update a Electricity record
+ClassMethod MergeElectricity() As %Status
+{
+	#dim tSC As %Status = $$$OK
+    #dim e As %Exception.AbstractException
+    Set data=%request.Content
+    
+    If data.mobileCombustionId '= "" {
+        Set obj = ##class(dc.carboncounter.Electricity).%OpenId(data.electricityId)
+    } Else {
+        Set obj = ##class(dc.carboncounter.Electricity).%New()
+    }
+    
+    $$$TOE(tSC,obj.%JSONImport(data))
+    $$$TOE(tSC,obj.%Save())
+
+    Set %response.Status = 204
+    Set %response.ContentType = ..#CONTENTTYPEJSON
+    Do obj.%JSONExport()
+
+    Quit tSC
+}
+
+/// Delete a record with id in Electricity
+ClassMethod DeleteElectricity(id As %Integer) As %Status
+{
+	#dim tSC As %Status = $$$OK
+    #dim e As %Exception.AbstractException
+    Set obj = ##class(dc.carboncounter.Electricity).%OpenId(id)
     If '$IsObject(obj) Return ..Http404()
 
     $$$TOE(tSC,obj.%DeleteId(id))

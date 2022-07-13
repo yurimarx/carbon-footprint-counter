@@ -125,6 +125,10 @@ import { StationaryService } from './components/stationary/stationaryservice';
 import { StationaryComponent } from './components/stationary/stationarycomponent';
 import { MobileComponent } from './components/mobile/mobilecomponent';
 import { MobileService } from './components/mobile/mobileservice';
+import { TransportationComponent } from './components/transportation/transportationcomponent';
+import { TransportationService } from './components/transportation/transportationservice';
+import { ElectricityService } from './components/electricity/electricityservice';
+import { ElectricityComponent } from './components/electricity/electricitycomponent';
 
 @NgModule({
     imports: [
@@ -231,6 +235,8 @@ import { MobileService } from './components/mobile/mobileservice';
         EmissionFactorComponent,
         StationaryComponent,
         MobileComponent,
+        TransportationComponent,
+        ElectricityComponent,
         BlockViewer,
         ErrorComponent,
         NotfoundComponent,
@@ -242,7 +248,7 @@ import { MobileService } from './components/mobile/mobileservice';
         CountryService, CustomerService, EventService, IconService, NodeService,
         PhotoService, ProductService, EmissionUnitService, EmissionSegmentService, 
         EmissionTypeService, EmissionFactorService, StationaryService, MobileService,
-        MenuService, ConfigService
+        TransportationService, ElectricityService, MenuService, ConfigService
     ],
     bootstrap: [AppComponent]
     

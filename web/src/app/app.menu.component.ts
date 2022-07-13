@@ -29,8 +29,8 @@ export class AppMenuComponent implements OnInit {
                 items: [
                     {label: 'Stationary Combustion', icon: 'pi pi-fw pi-sun', routerLink: ['/pages/stationary']},
                     {label: 'Mobile Combustion', icon: 'pi pi-fw pi-car', routerLink: ['/pages/mobile']},
-                    {label: 'Transportation', icon: 'pi pi-fw pi-send', routerLink: ['/pages/emissiontype']},
-                    {label: 'Purchased Electricity', icon: 'pi pi-fw pi-bolt', routerLink: ['/pages/emissionfactor']},
+                    {label: 'Transportation', icon: 'pi pi-fw pi-send', routerLink: ['/pages/transportation']},
+                    {label: 'Purchased Electricity', icon: 'pi pi-fw pi-bolt', routerLink: ['/pages/electricity']},
                 ]
             },
             {

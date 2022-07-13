@@ -15,14 +15,14 @@
                 </ng-template>
             </p-toolbar>
 
-            <p-table #dt [value]="mobiles" [columns]="cols" responsiveLayout="scroll" [rows]="10" 
+            <p-table #dt [value]="electricities" [columns]="cols" responsiveLayout="scroll" [rows]="10" 
                          [globalFilterFields]="['fuelName','year']" [rows]="10" [paginator]="true" 
                          [rowsPerPageOptions]="[10,20,30]" [showCurrentPageReport]="true" 
                          currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" 
-                         [rowHover]="true" dataKey="mobileCombustionId">
+                         [rowHover]="true" dataKey="electricityId">
                 <ng-template pTemplate="caption">
                     <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
-                        <h5 class="m-0">Calculate Mobile Emissions</h5>
+                        <h5 class="m-0">Calculate Electricity Emissions</h5>
                         <span class="block mt-2 md:mt-0 p-input-icon-left">
                             <i class="pi pi-search"></i>
                             <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')" placeholder="Search..." />
@@ -33,7 +33,7 @@
                     <tr>
                         <th pSortableColumn="facilityId">Facility ID <p-sortIcon field="facilityId"></p-sortIcon></th>
                         <th pSortableColumn="year">Year <p-sortIcon field="year"></p-sortIcon></th>
-                        <th pSortableColumn="fuelName">Fuel <p-sortIcon field="fuelName"></p-sortIcon></th>
+                        <th pSortableColumn="energy">Energy <p-sortIcon field="energyName"></p-sortIcon></th>
                         <th pSortableColumn="amount">Amount <p-sortIcon field="amount"></p-sortIcon></th>
                         <th pSortableColumn="co2">CO2 <p-sortIcon field="co2"></p-sortIcon></th>
                         <th pSortableColumn="ch4">CH4 <p-sortIcon field="ch4"></p-sortIcon></th>
@@ -41,41 +41,41 @@
                         <th></th>
                     </tr>
                 </ng-template>
-                <ng-template pTemplate="body" let-mobile>
+                <ng-template pTemplate="body" let-electricity>
                     <tr>
                         <td style="width:10%; min-width:10rem;">
                             <span class="p-column-title">Facility ID</span>
-                            {{mobile.facilityId}}
+                            {{electricity.facilityId}}
                         </td>
                         <td style="width:10%; min-width:10rem;">
                             <span class="p-column-title">Year</span>
-                            {{mobile.year}}
+                            {{electricity.year}}
                         </td>
                         <td style="width:35%; min-width:10rem;">
-                            <span class="p-column-title">Fuel</span>
-                            {{mobile.fuelName}}
+                            <span class="p-column-title">Energy</span>
+                            {{electricity.energyName}}
                         </td>
                         <td style="width:10%; min-width:10rem;">
                             <span class="p-column-title">Amount</span>
-                            {{mobile.amount}}
+                            {{electricity.amount}}
                         </td>
                         <td style="width:10%; min-width:10rem;">
                             <span class="p-column-title">CO2</span>
-                            {{mobile.co2.toFixed(8)}}
+                            {{electricity.co2.toFixed(8)}}
                         </td>
                         <td style="width:10%; min-width:10rem;">
                             <span class="p-column-title">CH4</span>
-                            {{mobile.ch4.toFixed(8)}}
+                            {{electricity.ch4.toFixed(8)}}
                         </td>
                         <td style="width:10%; min-width:10rem;">
                             <span class="p-column-title">N2O</span>
-                            {{mobile.n2o.toFixed(8)}}
+                            {{electricity.n2o.toFixed(8)}}
                         </td>
                         
                         <td>
                             <div class="flex">
-                                <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success mr-2" (click)="editMobile(mobile)"></button>
-                                <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning" (click)="deleteMobile(mobile)"></button>
+                                <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success mr-2" (click)="editElectricity(electricity)"></button>
+                                <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning" (click)="deleteElectricity(electricity)"></button>
                             </div>
                         </td>
                     </tr>
@@ -83,39 +83,39 @@
             </p-table>
         </div>
 
-        <p-dialog [(visible)]="mobileDialog" [style]="{width: '80%'}" 
-                    header="Mobile Emission Details" [modal]="true" class="p-fluid">
+        <p-dialog [(visible)]="electricityDialog" [style]="{width: '80%'}" 
+                    header="Electricity Emission Details" [modal]="true" class="p-fluid">
             <ng-template pTemplate="content">
                 <div class="grid">
                     <div class="field md:col-3 sm:col-4">
                         <label for="facilityid">Facility ID</label>
-                        <input type="text" pInputText id="facilityid" [(ngModel)]="mobile.facilityId" />
+                        <input type="text" pInputText id="facilityid" [(ngModel)]="electricity.facilityId" />
                     </div>
                     <div class="field md:col-2 sm:col-3">
                         <label for="year">Year</label>
-                        <p-inputNumber id="year" minFractionDigits="0" [(ngModel)]="mobile.year" mode="decimal"></p-inputNumber>
+                        <p-inputNumber id="year" minFractionDigits="0" [(ngModel)]="electricity.year" mode="decimal"></p-inputNumber>
                     </div>
                     <div class="field md:col-5 sm:col-4">
-                        <label for="fuel">Fuel</label>
+                        <label for="fuel">Energy</label>
                         <p-dropdown id="fuel" [options]="emissionFactors" (onChange)="onChangeFuel()" 
                                     optionLabel="emissionName" optionValue="emissionFactorId" dataKey="emissionFactorId"
-                                    [(ngModel)]="mobile.fuel" placeholder="Select a Fuel"></p-dropdown>
+                                    [(ngModel)]="electricity.energy" placeholder="Select a Energy"></p-dropdown>
                     </div>
                     <div class="field md:col-2 sm:col-3">
                         <label for="amout">Amount</label>
-                        <p-inputNumber locale="en-US" id="amount" (onBlur)="onChangeFuel()" [(ngModel)]="mobile.amount" mode="decimal"></p-inputNumber>
+                        <p-inputNumber locale="en-US" id="amount" (onBlur)="onChangeFuel()" [(ngModel)]="electricity.amount" mode="decimal"></p-inputNumber>
                     </div>
                     <div class="field md:col-2 sm:col-3">
                         <label for="co2">CO2</label>
-                        <p-inputNumber locale="en-US" minFractionDigits="8" id="co2" [(ngModel)]="mobile.co2" mode="decimal"></p-inputNumber>
+                        <p-inputNumber locale="en-US" minFractionDigits="8" id="co2" [(ngModel)]="electricity.co2" mode="decimal"></p-inputNumber>
                     </div>
                     <div class="field md:col-2 sm:col-3">
                         <label for="ch4">CH4</label>
-                        <p-inputNumber locale="en-US" minFractionDigits="8" id="ch4" [(ngModel)]="mobile.ch4" mode="decimal"></p-inputNumber>
+                        <p-inputNumber locale="en-US" minFractionDigits="8" id="ch4" [(ngModel)]="electricity.ch4" mode="decimal"></p-inputNumber>
                     </div>
                     <div class="field md:col-2 sm:col-3">
                         <label for="n2o">N2O</label>
-                        <p-inputNumber locale="en-US" minFractionDigits="8" id="n2o" [(ngModel)]="mobile.n2o" mode="decimal"></p-inputNumber>
+                        <p-inputNumber locale="en-US" minFractionDigits="8" id="n2o" [(ngModel)]="electricity.n2o" mode="decimal"></p-inputNumber>
                     </div>
                     
                 </div>
@@ -126,17 +126,17 @@
 
             <ng-template pTemplate="footer">
                 <button pButton pRipple label="Cancel" icon="pi pi-times" class="p-button-text" (click)="hideDialog()"></button>
-                <button pButton pRipple label="Save" icon="pi pi-check" class="p-button-text" (click)="saveMobile()"></button>
+                <button pButton pRipple label="Save" icon="pi pi-check" class="p-button-text" (click)="saveElectricity()"></button>
             </ng-template>
         </p-dialog>
 
-        <p-dialog [(visible)]="deleteMobileDialog" header="Confirm" [modal]="true" [style]="{width:'450px'}">
+        <p-dialog [(visible)]="deleteElectricityDialog" header="Confirm" [modal]="true" [style]="{width:'450px'}">
             <div class="flex align-items-center justify-content-center">
                 <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem"></i>
-                <span *ngIf="mobile">Are you sure you want to delete <b>{{mobile.facilityId}} on {{mobile.year}}</b>?</span>
+                <span *ngIf="electricity">Are you sure you want to delete <b>{{electricity.facilityId}} on {{electricity.year}}</b>?</span>
             </div>
             <ng-template pTemplate="footer">
-                <button pButton pRipple icon="pi pi-times" class="p-button-text" label="No" (click)="deleteMobileDialog = false"></button>
+                <button pButton pRipple icon="pi pi-times" class="p-button-text" label="No" (click)="deleteElectricityDialog = false"></button>
                 <button pButton pRipple icon="pi pi-check" class="p-button-text" label="Yes" (click)="confirmDelete()"></button>
             </ng-template>
         </p-dialog>
