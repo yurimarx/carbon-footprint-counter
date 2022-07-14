@@ -29,7 +29,7 @@ $ docker-compose up -d
 
 4. Go to http://localhost:52775/carboncounter/index.html to use the Carbon Counter frontend
 
-![Main screen](https://github.com/yurimarx/carbon-footprint-counter/raw/master/main.png "Main Screen")
+![Main screen](https://github.com/yurimarx/carbon-footprint-counter/raw/main/mobile.png "Main Screen")
 
 # Related articles
 Article about the app: https://community.intersystems.com/post/measure-greenhouse-gas-ghg-emissions-carbon-footprint-counter-app
