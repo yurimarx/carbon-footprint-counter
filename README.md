@@ -29,9 +29,10 @@ $ docker-compose up -d
 
 4. Go to http://localhost:52775/carboncounter/index.html to use the Carbon Counter frontend
 
-# To be done:
-1. Complete Emission Factor UI - prevision july, 12
-2. Create Emission Calculator UI - prevision july, 13
+![Main screen](https://github.com/yurimarx/carbon-footprint-counter/raw/master/main.png "Main Screen")
+
+# Related articles
+Article about the app: https://community.intersystems.com/post/measure-greenhouse-gas-ghg-emissions-carbon-footprint-counter-app
 
 # Credits
 I used the database and the rules from Green House Gas Protocol: https://ghgprotocol.org/ghg-emissions-calculation-tool
