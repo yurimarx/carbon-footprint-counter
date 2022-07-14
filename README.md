@@ -34,5 +34,8 @@ $ docker-compose up -d
 # Related articles
 Article about the app: https://community.intersystems.com/post/measure-greenhouse-gas-ghg-emissions-carbon-footprint-counter-app
 
+# Related Video
+YouTube Video: https://youtu.be/jfSm6-0TkIs
+
 # Credits
 I used the database and the rules from Green House Gas Protocol: https://ghgprotocol.org/ghg-emissions-calculation-tool
