@@ -14,12 +14,16 @@
                       Url="/carboncounter" UseSessionCookie="2"/>
       <SourcesRoot>src</SourcesRoot>
       <Resource Directory="dc" Name="carbon-counter.PKG"/>
+      <Resource Directory="data" Name="carboncounterdata.gof"/>
       <CSPApplication CookiePath="/rest/carbon-counter/" DefaultTimeout="900" 
                       DispatchClass="dc.carboncounter.CarbonCounterRESTAPI" MatchRoles=":${dbrole}" 
                       PasswordAuthEnabled="1" Recurse="1" ServeFiles="1" 
                       ServeFilesTimeout="3600" UnauthenticatedEnabled="0" 
                       Url="/rest/carbon-counter" UseSessionCookie="2"/>
       <UnitTest Name="/tests" Package="UnitTest" Phase="test"/>
+      <Invokes>
+        <Invoke Class="dc.carboncounter.Migration" Method="Migrate"></Invoke>
+      </Invokes>
     </Module>
   </Document>
 </Export>
