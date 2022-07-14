@@ -3,13 +3,13 @@ Class dc.carboncounter.Migration
 
 // Migrate
 
-ClassMethod Migrate() As %Status
+ClassMethod Migrate(Path As %String) As %Status
 {
     Set sc = $$$OK
     Set sc = ..MigrateEmissionUnit()
     Set sc = ..MigrateEmissionSegment()
     Set sc = ..MigrateEmissionType()
-    Set sc = ..MigrateEmissionFactor()
+    Set sc = ..MigrateEmissionFactor(Path)
     
     Return sc
 }
@@ -123,11 +123,11 @@ ClassMethod GetEmissionUnitByName(name As %String) As dc.carboncounter.EmissionU
 }
 
 /// Migrate Emission Factor
-ClassMethod MigrateEmissionFactor() As %Status
+ClassMethod MigrateEmissionFactor(Path As %String) As %Status
 {
     Set sc = $$$OK
     Set stream=##class(%Stream.FileCharacter).%New()
-    Set sc=stream.LinkToFile("/opt/carbon-counter/emissionfactors.csv")
+    Set sc=stream.LinkToFile(Path)
     Do stream.ReadLine(,.sc)
     While 'stream.AtEnd {
         Set emissionFactor = ##class(EmissionFactor).%New()

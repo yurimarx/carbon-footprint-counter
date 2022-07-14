@@ -54,7 +54,7 @@ XData setup
   </Invoke>
 
   <Invoke Class="App.Installer" Method="SetupMigrate" CheckStatus="1">
-    
+    <Arg Value="/opt/carbon-counter/emissionfactors.csv"/>
   </Invoke>
 
 
@@ -78,10 +78,10 @@ ClassMethod SetupREST(pNameSpace As %String, pUrl As %String, pResource As %Stri
   Quit ##class(Security.Applications).Create(pUrl, .p)
 }
 
-ClassMethod SetupMigrate() As %Status
+ClassMethod SetupMigrate(Path As %String) As %Status
 {
   Set $Namespace = "carboncounter"
-  Quit ##class(dc.carboncounter.Migration).Migrate()
+  Quit ##class(dc.carboncounter.Migration).Migrate(Path)
 }
 
 }

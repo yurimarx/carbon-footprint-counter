@@ -7,6 +7,8 @@
       <Description>Carbon footprint calculator</Description>
       <Keywords>REST,Full-stack,Carbon,Footprint,Calculator</Keywords>
       <Packaging>module</Packaging>
+      <FileCopy Name="emissionfactors.csv" Target="${cspdir}emissionfactors.csv"/>
+      <FileCopy Name="web/dist/sakai" Target="${cspdir}"/>
       <CSPApplication CookiePath="/carboncounter/" DefaultTimeout="900" 
                       DeployPath="${cspdir}/carbon-counter" MatchRoles=":${dbrole}" 
                       PasswordAuthEnabled="0" Recurse="1" ServeFiles="1" 
@@ -22,7 +24,9 @@
                       Url="/rest/carbon-counter" UseSessionCookie="2"/>
       <UnitTest Name="/tests" Package="UnitTest" Phase="test"/>
       <Invokes>
-        <Invoke Class="dc.carboncounter.Migration" Method="Migrate"></Invoke>
+        <Invoke Class="dc.carboncounter.Migration" Method="Migrate">
+          <Arg>${cspdir}emissionfactors.csv</Arg>
+        </Invoke>
       </Invokes>
     </Module>
   </Document>
