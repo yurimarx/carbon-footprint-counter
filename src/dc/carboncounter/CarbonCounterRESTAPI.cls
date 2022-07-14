@@ -821,7 +821,7 @@ ClassMethod GetElectricityCalculation(id As %Integer, amount As %Double) As %Sta
     Set obj = ##class(dc.carboncounter.EmissionFactor).%OpenId(id)
 
     Set result = ##class(dc.carboncounter.Electricity).%New()
-    Set result.fuel = obj
+    Set result.energy = obj
     Set result.co2 = obj.co2Factor * (amount/1000)
     Set result.ch4 = obj.ch4Factor * (amount/1000)
     Set result.n2o = obj.n2oFactor * (amount/1000)

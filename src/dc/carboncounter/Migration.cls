@@ -126,12 +126,12 @@ ClassMethod GetEmissionUnitByName(name As %String) As dc.carboncounter.EmissionU
 ClassMethod MigrateEmissionFactor() As %Status
 {
     Set sc = $$$OK
-    Set file  = ##class(%Stream.FileCharacter).%New("/opt/carbon-counter/emissionfactors.csv")
-    Set sc =  file.Open("RU")
-    Do file.ReadLine(,.sc)
-    While 'file.AtEnd {
+    Set stream=##class(%Stream.FileCharacter).%New()
+    Set sc=stream.LinkToFile("/opt/carbon-counter/emissionfactors.csv")
+    Do stream.ReadLine(,.sc)
+    While 'stream.AtEnd {
         Set emissionFactor = ##class(EmissionFactor).%New()
-        Set line = file.ReadLine(,.sc)
+        Set line = stream.ReadLine(,.sc)
         Set emissionFactor.emissionType = ##class(EmissionType).%OpenId($PIECE(line,";",1))
         Set emissionFactor.emissionName = $PIECE(line,";",2)
         Set emissionFactor.hhv = $NUMBER($PIECE(line,";",3),",")
@@ -149,7 +149,6 @@ ClassMethod MigrateEmissionFactor() As %Status
         //Set emissionFactor.no2Kg = $NUMBER($PIECE(line,";",15),",")
         Set sc = emissionFactor.%Save()
     }
-    Do file.Close()
     Return sc
 }
 
