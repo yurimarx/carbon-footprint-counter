@@ -9,21 +9,34 @@ Parameter HandleCorsRequest = 1;
 
 Parameter PAGESIZE As INTEGER = 20;
 
-/// Get Results from SQL 
-ClassMethod GetSQLResults(Sql As %String, Output rset As %SQL.StatementResult, filter As %Integer = 0) As %Status
+ClassMethod SaveAndReturn(obj As %Persistent, data As %CSP.Stream) As %Status
 {
-    #Dim tSC As %Status
+    Set tSC = 1
 
-    Set qry = Sql
-    Set tStatement = ##class(%SQL.Statement).%New()
-    Set tSC = tStatement.%Prepare(qry)
-    If tSC'=1 {WRITE "%Prepare failed:" DO $System.Status.DisplayError(tSC) QUIT}
-    If filter = 0 {
-      Set rset = tStatement.%Execute()
-    } Else {
-      Set rset = tStatement.%Execute(filter)
+    $$$TOE(tSC,obj.%JSONImport(data))
+
+    Set tSC = ##class(dc.carboncounter.CarbonCounterService).Save(obj)
+
+    Set %response.Status = 204
+    Set %response.ContentType = ..#CONTENTTYPEJSON
+    
+    Quit tSC
+}
+
+ClassMethod ExportData(rset As %SQL.StatementResult, className As %Persistent)
+{
+    Set %response.ContentType = ..#CONTENTTYPEJSON
+    Write "["
+    if rset.%Next() {
+        Set obj = className.%OpenId(rset.ID)
+        Do obj.%JSONExport()
     }
-    Return tSC
+    While rset.%Next() {
+        Write ","
+        Set obj = className.%OpenId(rset.ID)
+        Do obj.%JSONExport()
+    }
+    Write "]"
 }
 
 ClassMethod OnPreDispatch(pUrl As %String, pMethod As %String, ByRef pContinue As %Boolean) As %Status

@@ -118,20 +118,10 @@ ClassMethod GetAllEmissionUnits() As %Status
 
     #dim tSC As %Status = $$$OK
 
-    Set tSC = ..GetSQLResults("SELECT ID FROM dc_carboncounter.EmissionUnit", .rset)
+    Set tSC = ##class(CarbonCounterService).GetAll("EmissionUnit", .rset)
   
-    Set %response.ContentType = ..#CONTENTTYPEJSON
-    Write "["
-    if rset.%Next() {
-        Set obj = ##class(dc.carboncounter.EmissionUnit).%OpenId(rset.ID)    
-        Do obj.%JSONExport()
-    }
-    While rset.%Next() {   
-        Write ","
-        Set obj = ##class(dc.carboncounter.EmissionUnit).%OpenId(rset.ID)    
-        Do obj.%JSONExport()
-    }
-    Write "]"
+    Do ..ExportData(rset, ##class(EmissionUnit).%New())
+
     Quit tSC
 }
 
@@ -139,11 +129,10 @@ ClassMethod GetAllEmissionUnits() As %Status
 ClassMethod GetEmissionUnit(id As %Integer) As %Status
 {
 	#dim tSC As %Status = $$$OK
-    #dim e As %Exception.AbstractException
-
+    
     Set %response.ContentType = ..#CONTENTTYPEJSON
 
-    Set obj = ##class(dc.carboncounter.EmissionUnit).%OpenId(id)
+    Do ##class(CarbonCounterService).GetOne(##class(EmissionUnit).%New(), .obj, id)  
 
     If '$IsObject(obj) Quit ..Http404()
 
@@ -156,21 +145,14 @@ ClassMethod GetEmissionUnit(id As %Integer) As %Status
 ClassMethod MergeEmissionUnit() As %Status
 {
 	#dim tSC As %Status = $$$OK
-    #dim e As %Exception.AbstractException
     Set data=%request.Content
     
+    Set obj = ##class(dc.carboncounter.EmissionUnit).%New()
     If data.emissionUnitId '= "" {
         Set obj = ##class(dc.carboncounter.EmissionUnit).%OpenId(data.emissionUnitId)
-    } Else {
-        Set obj = ##class(dc.carboncounter.EmissionUnit).%New()
     }
     
-    $$$TOE(tSC,obj.%JSONImport(data))
-    $$$TOE(tSC,obj.%Save())
-
-    Set %response.Status = 204
-    Set %response.ContentType = ..#CONTENTTYPEJSON
-    Do obj.%JSONExport()
+    Set tSC = ..SaveAndReturn(obj, data) 
 
     Quit tSC
 }
@@ -198,20 +180,10 @@ ClassMethod GetAllEmissionType() As %Status
 
     #dim tSC As %Status = $$$OK
 
-    Set tSC = ..GetSQLResults("SELECT ID FROM dc_carboncounter.EmissionType", .rset)
+    Set tSC = ##class(CarbonCounterService).GetAll("EmissionType", .rset)
   
-    Set %response.ContentType = ..#CONTENTTYPEJSON
-    Write "["
-    if rset.%Next() {
-        Set obj = ##class(dc.carboncounter.EmissionType).%OpenId(rset.ID)    
-        Do obj.%JSONExport()
-    }
-    While rset.%Next() {   
-        Write ","
-        Set obj = ##class(dc.carboncounter.EmissionType).%OpenId(rset.ID)    
-        Do obj.%JSONExport()
-    }
-    Write "]"
+    Do ..ExportData(rset, ##class(EmissionType).%New())
+
     Quit tSC
 }
 
@@ -219,11 +191,10 @@ ClassMethod GetAllEmissionType() As %Status
 ClassMethod GetEmissionType(id As %Integer) As %Status
 {
 	#dim tSC As %Status = $$$OK
-    #dim e As %Exception.AbstractException
-
+    
     Set %response.ContentType = ..#CONTENTTYPEJSON
 
-    Set obj = ##class(dc.carboncounter.EmissionType).%OpenId(id)
+    Do ##class(CarbonCounterService).GetOne(##class(EmissionType).%New(), .obj, id)  
 
     If '$IsObject(obj) Quit ..Http404()
 
@@ -236,21 +207,14 @@ ClassMethod GetEmissionType(id As %Integer) As %Status
 ClassMethod MergeEmissionType() As %Status
 {
 	#dim tSC As %Status = $$$OK
-    #dim e As %Exception.AbstractException
     Set data=%request.Content
     
-    If data.emissionTypeId '= "" {
+    Set obj = ##class(dc.carboncounter.EmissionType).%New()
+    If data.emissionUnitId '= "" {
         Set obj = ##class(dc.carboncounter.EmissionType).%OpenId(data.emissionTypeId)
-    } Else {
-        Set obj = ##class(dc.carboncounter.EmissionType).%New()
     }
     
-    $$$TOE(tSC,obj.%JSONImport(data))
-    $$$TOE(tSC,obj.%Save())
-
-    Set %response.Status = 204
-    Set %response.ContentType = ..#CONTENTTYPEJSON
-    Do obj.%JSONExport()
+    Set tSC = ..SaveAndReturn(obj, data) 
 
     Quit tSC
 }
@@ -278,20 +242,10 @@ ClassMethod GetAllEmissionSegment() As %Status
 
     #dim tSC As %Status = $$$OK
 
-    Set tSC = ..GetSQLResults("SELECT ID FROM dc_carboncounter.EmissionSegment", .rset)
+    Set tSC = ##class(CarbonCounterService).GetAll("EmissionSegment", .rset)
   
-    Set %response.ContentType = ..#CONTENTTYPEJSON
-    Write "["
-    if rset.%Next() {
-        Set obj = ##class(dc.carboncounter.EmissionSegment).%OpenId(rset.ID)    
-        Do obj.%JSONExport()
-    }
-    While rset.%Next() {   
-        Write ","
-        Set obj = ##class(dc.carboncounter.EmissionSegment).%OpenId(rset.ID)    
-        Do obj.%JSONExport()
-    }
-    Write "]"
+    Do ..ExportData(rset, ##class(EmissionSegment).%New())
+
     Quit tSC
 }
 
@@ -299,11 +253,10 @@ ClassMethod GetAllEmissionSegment() As %Status
 ClassMethod GetEmissionSegment(id As %Integer) As %Status
 {
 	#dim tSC As %Status = $$$OK
-    #dim e As %Exception.AbstractException
-
+    
     Set %response.ContentType = ..#CONTENTTYPEJSON
 
-    Set obj = ##class(dc.carboncounter.EmissionSegment).%OpenId(id)
+    Do ##class(CarbonCounterService).GetOne(##class(EmissionSegment).%New(), .obj, id)  
 
     If '$IsObject(obj) Quit ..Http404()
 
@@ -316,21 +269,14 @@ ClassMethod GetEmissionSegment(id As %Integer) As %Status
 ClassMethod MergeEmissionSegment() As %Status
 {
 	#dim tSC As %Status = $$$OK
-    #dim e As %Exception.AbstractException
     Set data=%request.Content
     
-    If data.emissionSegmentId '= "" {
+    Set obj = ##class(dc.carboncounter.EmissionSegment).%New()
+    If data.emissionUnitId '= "" {
         Set obj = ##class(dc.carboncounter.EmissionSegment).%OpenId(data.emissionSegmentId)
-    } Else {
-        Set obj = ##class(dc.carboncounter.EmissionSegment).%New()
     }
     
-    $$$TOE(tSC,obj.%JSONImport(data))
-    $$$TOE(tSC,obj.%Save())
-
-    Set %response.Status = 204
-    Set %response.ContentType = ..#CONTENTTYPEJSON
-    Do obj.%JSONExport()
+    Set tSC = ..SaveAndReturn(obj, data) 
 
     Quit tSC
 }
@@ -358,20 +304,10 @@ ClassMethod GetAllEmissionFactor() As %Status
 
     #dim tSC As %Status = $$$OK
 
-    Set tSC = ..GetSQLResults("SELECT ID FROM dc_carboncounter.EmissionFactor", .rset)
+    Set tSC = ##class(CarbonCounterService).GetAll("EmissionFactor", .rset)
   
-    Set %response.ContentType = ..#CONTENTTYPEJSON
-    Write "["
-    if rset.%Next() {
-        Set obj = ##class(dc.carboncounter.EmissionFactor).%OpenId(rset.ID)    
-        Do obj.%JSONExport()
-    }
-    While rset.%Next() {   
-        Write ","
-        Set obj = ##class(dc.carboncounter.EmissionFactor).%OpenId(rset.ID)    
-        Do obj.%JSONExport()
-    }
-    Write "]"
+    Do ..ExportData(rset, ##class(EmissionFactor).%New())
+
     Quit tSC
 }
 
@@ -381,7 +317,7 @@ ClassMethod GetAllEmissionFactorBySegment(id As %Integer) As %Status
 
     #dim tSC As %Status = $$$OK
 
-    Set tSC = ..GetSQLResults("SELECT ID FROM dc_carboncounter.EmissionFactor WHERE emissionType->emissionSegment->emissionSegmentId = ?", .rset, id)
+    Set tSC = ##class(CarbonCounterService).GetSQLResults("SELECT ID FROM dc_carboncounter.EmissionFactor WHERE emissionType->emissionSegment->emissionSegmentId = ?", .rset, id)
   
     Set %response.ContentType = ..#CONTENTTYPEJSON
     Write "["
@@ -402,11 +338,10 @@ ClassMethod GetAllEmissionFactorBySegment(id As %Integer) As %Status
 ClassMethod GetEmissionFactor(id As %Integer) As %Status
 {
 	#dim tSC As %Status = $$$OK
-    #dim e As %Exception.AbstractException
-
+    
     Set %response.ContentType = ..#CONTENTTYPEJSON
 
-    Set obj = ##class(dc.carboncounter.EmissionFactor).%OpenId(id)
+    Do ##class(CarbonCounterService).GetOne(##class(EmissionFactor).%New(), .obj, id)  
 
     If '$IsObject(obj) Quit ..Http404()
 
@@ -419,21 +354,14 @@ ClassMethod GetEmissionFactor(id As %Integer) As %Status
 ClassMethod MergeEmissionFactor() As %Status
 {
 	#dim tSC As %Status = $$$OK
-    #dim e As %Exception.AbstractException
     Set data=%request.Content
     
-    If data.emissionFactorId '= "" {
+    Set obj = ##class(dc.carboncounter.EmissionFactor).%New()
+    If data.emissionUnitId '= "" {
         Set obj = ##class(dc.carboncounter.EmissionFactor).%OpenId(data.emissionFactorId)
-    } Else {
-        Set obj = ##class(dc.carboncounter.EmissionFactor).%New()
     }
     
-    $$$TOE(tSC,obj.%JSONImport(data))
-    $$$TOE(tSC,obj.%Save())
-
-    Set %response.Status = 204
-    Set %response.ContentType = ..#CONTENTTYPEJSON
-    Do obj.%JSONExport()
+    Set tSC = ..SaveAndReturn(obj, data) 
 
     Quit tSC
 }
@@ -461,20 +389,10 @@ ClassMethod GetAllStationary() As %Status
 
     #dim tSC As %Status = $$$OK
 
-    Set tSC = ..GetSQLResults("SELECT ID FROM dc_carboncounter.StationaryCombustion", .rset)
+    Set tSC = ##class(CarbonCounterService).GetAll("StationaryCombustion", .rset)
   
-    Set %response.ContentType = ..#CONTENTTYPEJSON
-    Write "["
-    if rset.%Next() {
-        Set obj = ##class(dc.carboncounter.StationaryCombustion).%OpenId(rset.ID)    
-        Do obj.%JSONExport()
-    }
-    While rset.%Next() {   
-        Write ","
-        Set obj = ##class(dc.carboncounter.StationaryCombustion).%OpenId(rset.ID)    
-        Do obj.%JSONExport()
-    }
-    Write "]"
+    Do ..ExportData(rset, ##class(StationaryCombustion).%New())
+
     Quit tSC
 }
 
@@ -482,11 +400,10 @@ ClassMethod GetAllStationary() As %Status
 ClassMethod GetStationary(id As %Integer) As %Status
 {
 	#dim tSC As %Status = $$$OK
-    #dim e As %Exception.AbstractException
-
+    
     Set %response.ContentType = ..#CONTENTTYPEJSON
 
-    Set obj = ##class(dc.carboncounter.StationaryCombustion).%OpenId(id)
+    Do ##class(CarbonCounterService).GetOne(##class(StationaryCombustion).%New(), .obj, id)  
 
     If '$IsObject(obj) Quit ..Http404()
 
@@ -522,21 +439,14 @@ ClassMethod GetStationaryCalculation(id As %Integer, amount As %Double) As %Stat
 ClassMethod MergeStationary() As %Status
 {
 	#dim tSC As %Status = $$$OK
-    #dim e As %Exception.AbstractException
     Set data=%request.Content
     
-    If data.stationaryCombustionId '= "" {
+    Set obj = ##class(dc.carboncounter.StationaryCombustion).%New()
+    If data.emissionUnitId '= "" {
         Set obj = ##class(dc.carboncounter.StationaryCombustion).%OpenId(data.stationaryCombustionId)
-    } Else {
-        Set obj = ##class(dc.carboncounter.StationaryCombustion).%New()
     }
     
-    $$$TOE(tSC,obj.%JSONImport(data))
-    $$$TOE(tSC,obj.%Save())
-
-    Set %response.Status = 204
-    Set %response.ContentType = ..#CONTENTTYPEJSON
-    Do obj.%JSONExport()
+    Set tSC = ..SaveAndReturn(obj, data) 
 
     Quit tSC
 }
@@ -564,20 +474,10 @@ ClassMethod GetAllMobile() As %Status
 
     #dim tSC As %Status = $$$OK
 
-    Set tSC = ..GetSQLResults("SELECT ID FROM dc_carboncounter.MobileCombustion", .rset)
+    Set tSC = ##class(CarbonCounterService).GetAll("MobileCombustion", .rset)
   
-    Set %response.ContentType = ..#CONTENTTYPEJSON
-    Write "["
-    if rset.%Next() {
-        Set obj = ##class(dc.carboncounter.MobileCombustion).%OpenId(rset.ID)    
-        Do obj.%JSONExport()
-    }
-    While rset.%Next() {   
-        Write ","
-        Set obj = ##class(dc.carboncounter.MobileCombustion).%OpenId(rset.ID)    
-        Do obj.%JSONExport()
-    }
-    Write "]"
+    Do ..ExportData(rset, ##class(MobileCombustion).%New())
+
     Quit tSC
 }
 
@@ -585,11 +485,10 @@ ClassMethod GetAllMobile() As %Status
 ClassMethod GetMobile(id As %Integer) As %Status
 {
 	#dim tSC As %Status = $$$OK
-    #dim e As %Exception.AbstractException
-
+    
     Set %response.ContentType = ..#CONTENTTYPEJSON
 
-    Set obj = ##class(dc.carboncounter.MobileCombustion).%OpenId(id)
+    Do ##class(CarbonCounterService).GetOne(##class(MobileCombustion).%New(), .obj, id)  
 
     If '$IsObject(obj) Quit ..Http404()
 
@@ -631,21 +530,14 @@ ClassMethod GetMobileCalculation(id As %Integer, amount As %Double) As %Status
 ClassMethod MergeMobile() As %Status
 {
 	#dim tSC As %Status = $$$OK
-    #dim e As %Exception.AbstractException
     Set data=%request.Content
     
-    If data.mobileCombustionId '= "" {
+    Set obj = ##class(dc.carboncounter.MobileCombustion).%New()
+    If data.emissionUnitId '= "" {
         Set obj = ##class(dc.carboncounter.MobileCombustion).%OpenId(data.mobileCombustionId)
-    } Else {
-        Set obj = ##class(dc.carboncounter.MobileCombustion).%New()
     }
     
-    $$$TOE(tSC,obj.%JSONImport(data))
-    $$$TOE(tSC,obj.%Save())
-
-    Set %response.Status = 204
-    Set %response.ContentType = ..#CONTENTTYPEJSON
-    Do obj.%JSONExport()
+    Set tSC = ..SaveAndReturn(obj, data) 
 
     Quit tSC
 }
@@ -673,20 +565,10 @@ ClassMethod GetAllTransportation() As %Status
 
     #dim tSC As %Status = $$$OK
 
-    Set tSC = ..GetSQLResults("SELECT ID FROM dc_carboncounter.Transportation", .rset)
+    Set tSC = ##class(CarbonCounterService).GetAll("Transportation", .rset)
   
-    Set %response.ContentType = ..#CONTENTTYPEJSON
-    Write "["
-    if rset.%Next() {
-        Set obj = ##class(dc.carboncounter.Transportation).%OpenId(rset.ID)    
-        Do obj.%JSONExport()
-    }
-    While rset.%Next() {   
-        Write ","
-        Set obj = ##class(dc.carboncounter.Transportation).%OpenId(rset.ID)    
-        Do obj.%JSONExport()
-    }
-    Write "]"
+    Do ..ExportData(rset, ##class(Transportation).%New())
+
     Quit tSC
 }
 
@@ -694,11 +576,10 @@ ClassMethod GetAllTransportation() As %Status
 ClassMethod GetTransportation(id As %Integer) As %Status
 {
 	#dim tSC As %Status = $$$OK
-    #dim e As %Exception.AbstractException
-
+    
     Set %response.ContentType = ..#CONTENTTYPEJSON
 
-    Set obj = ##class(dc.carboncounter.Transportation).%OpenId(id)
+    Do ##class(CarbonCounterService).GetOne(##class(Transportation).%New(), .obj, id)  
 
     If '$IsObject(obj) Quit ..Http404()
 
@@ -734,21 +615,14 @@ ClassMethod GetTransportationCalculation(id As %Integer, amount As %Double) As %
 ClassMethod MergeTransportation() As %Status
 {
 	#dim tSC As %Status = $$$OK
-    #dim e As %Exception.AbstractException
     Set data=%request.Content
     
-    If data.mobileCombustionId '= "" {
+    Set obj = ##class(dc.carboncounter.Transportation).%New()
+    If data.emissionUnitId '= "" {
         Set obj = ##class(dc.carboncounter.Transportation).%OpenId(data.transportationId)
-    } Else {
-        Set obj = ##class(dc.carboncounter.Transportation).%New()
     }
     
-    $$$TOE(tSC,obj.%JSONImport(data))
-    $$$TOE(tSC,obj.%Save())
-
-    Set %response.Status = 204
-    Set %response.ContentType = ..#CONTENTTYPEJSON
-    Do obj.%JSONExport()
+    Set tSC = ..SaveAndReturn(obj, data) 
 
     Quit tSC
 }
@@ -776,20 +650,10 @@ ClassMethod GetAllElectricity() As %Status
 
     #dim tSC As %Status = $$$OK
 
-    Set tSC = ..GetSQLResults("SELECT ID FROM dc_carboncounter.Electricity", .rset)
+    Set tSC = ##class(CarbonCounterService).GetAll("Electricity", .rset)
   
-    Set %response.ContentType = ..#CONTENTTYPEJSON
-    Write "["
-    if rset.%Next() {
-        Set obj = ##class(dc.carboncounter.Electricity).%OpenId(rset.ID)    
-        Do obj.%JSONExport()
-    }
-    While rset.%Next() {   
-        Write ","
-        Set obj = ##class(dc.carboncounter.Electricity).%OpenId(rset.ID)    
-        Do obj.%JSONExport()
-    }
-    Write "]"
+    Do ..ExportData(rset, ##class(Electricity).%New())
+
     Quit tSC
 }
 
@@ -797,11 +661,10 @@ ClassMethod GetAllElectricity() As %Status
 ClassMethod GetElectricity(id As %Integer) As %Status
 {
 	#dim tSC As %Status = $$$OK
-    #dim e As %Exception.AbstractException
-
+    
     Set %response.ContentType = ..#CONTENTTYPEJSON
 
-    Set obj = ##class(dc.carboncounter.Electricity).%OpenId(id)
+    Do ##class(CarbonCounterService).GetOne(##class(Electricity).%New(), .obj, id)  
 
     If '$IsObject(obj) Quit ..Http404()
 
@@ -837,21 +700,14 @@ ClassMethod GetElectricityCalculation(id As %Integer, amount As %Double) As %Sta
 ClassMethod MergeElectricity() As %Status
 {
 	#dim tSC As %Status = $$$OK
-    #dim e As %Exception.AbstractException
     Set data=%request.Content
     
-    If data.mobileCombustionId '= "" {
+    Set obj = ##class(dc.carboncounter.Electricity).%New()
+    If data.emissionUnitId '= "" {
         Set obj = ##class(dc.carboncounter.Electricity).%OpenId(data.electricityId)
-    } Else {
-        Set obj = ##class(dc.carboncounter.Electricity).%New()
     }
     
-    $$$TOE(tSC,obj.%JSONImport(data))
-    $$$TOE(tSC,obj.%Save())
-
-    Set %response.Status = 204
-    Set %response.ContentType = ..#CONTENTTYPEJSON
-    Do obj.%JSONExport()
+    Set tSC = ..SaveAndReturn(obj, data) 
 
     Quit tSC
 }
@@ -879,16 +735,16 @@ ClassMethod GetTotals() As %Status
 
     #dim tSC As %Status = $$$OK
 
-    Set tSC = ..GetSQLResults("SELECT sum(ch4) ch4, sum(co2) co2, sum(n2o) n2o "_
+    Set tSC = ##class(CarbonCounterService).GetSQLResults("SELECT sum(ch4) ch4, sum(co2) co2, sum(n2o) n2o "_
                                 "FROM dc_carboncounter.StationaryCombustion", .rsetStationary)
     
-    Set tSC = ..GetSQLResults("SELECT sum(ch4) ch4, sum(co2) co2, sum(n2o) n2o "_
+    Set tSC = ##class(CarbonCounterService).GetSQLResults("SELECT sum(ch4) ch4, sum(co2) co2, sum(n2o) n2o "_
                                 "FROM dc_carboncounter.MobileCombustion", .rsetMobile)
   
-    Set tSC = ..GetSQLResults("SELECT sum(ch4) ch4, sum(co2) co2, sum(n2o) n2o "_
+    Set tSC = ##class(CarbonCounterService).GetSQLResults("SELECT sum(ch4) ch4, sum(co2) co2, sum(n2o) n2o "_
                                 "FROM dc_carboncounter.Transportation", .rsetTransportation)
     
-    Set tSC = ..GetSQLResults("SELECT sum(ch4) ch4, sum(co2) co2, sum(n2o) n2o "_
+    Set tSC = ##class(CarbonCounterService).GetSQLResults("SELECT sum(ch4) ch4, sum(co2) co2, sum(n2o) n2o "_
                                 "FROM dc_carboncounter.Electricity", .rsetElectricity)
     
     Set co2 = 0
