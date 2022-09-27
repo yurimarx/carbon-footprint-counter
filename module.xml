@@ -15,8 +15,7 @@
                       ServeFilesTimeout="3600" SourcePath="/web" UnauthenticatedEnabled="0" 
                       Url="/carboncounter" UseSessionCookie="2"/>
       <SourcesRoot>src</SourcesRoot>
-      <Resource Directory="dc" Name="carbon-counter.PKG"/>
-      <Resource Directory="data" Name="carboncounterdata.gof"/>
+      <Resource Name="dc.carboncounter.PKG"/>
       <CSPApplication CookiePath="/rest/carbon-counter/" DefaultTimeout="900" 
                       DispatchClass="dc.carboncounter.CarbonCounterRESTAPI" MatchRoles=":${dbrole}" 
                       PasswordAuthEnabled="1" Recurse="1" ServeFiles="1" 
